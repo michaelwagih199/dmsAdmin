@@ -1,0 +1,104 @@
+<nz-card nzTitle="Users " [nzExtra]="extraTemplate">
+
+  <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.username }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.roles[0].name}}</td>
+        <td>
+          <a class="btn text-danger" (click)="onDelete(data)">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="showModal()"><i nz-icon nzType="user-add"></i>Add
+    User</button>
+</ng-template>
+
+<!--add user-->
+<nz-modal [(nzVisible)]="isModalvisable" [nzTitle]="modalPvTitle" [nzContent]="modalDoctorContent"
+  [nzFooter]="modalPvFooter" (nzOnCancel)="handleCentermodal()">
+
+  <ng-template #modalPvTitle>
+    Add new User
+  </ng-template>
+
+  <ng-template #modalDoctorContent>
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitUserForm()">
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="username" nzRequired>Name</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Please input username!">
+          <input nz-input id="username" formControlName="username" placeholder="User Name"
+            [(ngModel)]="user.username" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="email" nzRequired>Email</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Please input valid Email!">
+          <input nz-input id="doctorSpecialty" formControlName="email" placeholder="Email" [(ngModel)]="user.email" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="password" nzRequired>Password</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
+          <input nz-input type="password" id="password" formControlName="password" [(ngModel)]="user.password"
+            (ngModelChange)="updateConfirmValidator()" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+          <input nz-input type="password" formControlName="checkPassword" id="checkPassword" />
+          <ng-template #errorTpl let-control>
+            <ng-container *ngIf="control.hasError('required')">
+              Please confirm your password!
+            </ng-container>
+            <ng-container *ngIf="control.hasError('confirm')">
+              Two passwords that you enter is inconsistent!
+            </ng-container>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzFor="roles" nzRequired>Roles</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please select User Roles!">
+          <nz-select id="roles" formControlName="roles" nzPlaceHolder="User Roles" [(ngModel)]="selectedRolesValue">
+            <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+            <nz-option nzValue="mod" nzLabel="Moderator"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button nzType="primary" nzBlock [disabled]="!validateForm.valid">Save User</button>
+        </nz-form-control>
+      </nz-form-item>
+
+
+    </form>
+
+  </ng-template>
+
+  <ng-template #modalPvFooter>
+    <p class="text-center text-info"> Add user </p>
+  </ng-template>
+
+</nz-modal>

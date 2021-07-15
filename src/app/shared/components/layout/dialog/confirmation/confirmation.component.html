@@ -1,0 +1,14 @@
+<mat-dialog-content>
+	<div class="text-center">
+		<div class="dot">
+			<mat-icon style="margin-top: 25%;" color="warn">delete</mat-icon>
+		</div>
+	</div>
+	<h3 class="mt-3">
+		{{message}}
+	</h3>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+	<button mat-raised-button color="primary" (click)="onConfirmClick()" tabindex="1">{{confirmButtonText}}</button>
+	<button mat-raised-button mat-dialog-close tabindex="-1">{{cancelButtonText}}</button>
+</mat-dialog-actions>

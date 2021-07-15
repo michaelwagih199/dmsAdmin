@@ -1,0 +1,49 @@
+<!-- Toolbar -->
+<div class="doNotPrint">
+	<mat-toolbar color="primary" class="header">
+		<span>
+			<mat-icon (click)="sidenav.toggle()" class="hamburger">menu</mat-icon>
+		</span>
+		<p class="mt-2" style="font-size: 18px;">{{screenTitle}}</p>
+		<div class="row mr-2 ">
+			<p class="mt-2 " style="font-size: 18px;" >{{userName}}</p>
+			<button mat-icon-button color="accent" (click)="logout()">
+				<mat-icon>person</mat-icon>
+			</button>
+		</div>
+	</mat-toolbar>
+	<mat-sidenav-container>
+		<!-- Sidenav -->
+		<mat-sidenav #sidenav [mode]="isBiggerScreen() ? 'over' : 'side'" [(opened)]="opened" [fixedInViewport]="true"
+			[fixedTopGap]>
+			<mat-nav-list>
+				
+				<a *ngIf="DynamicNavBar.patients" mat-list-item [routerLink]="'/admin/department'"
+					(click)="addTitle('Departments')">
+					<mat-icon color="primary">person</mat-icon> Departments
+				</a>
+
+				<a *ngIf="DynamicNavBar.reports" mat-list-item [routerLink]="'/admin/reports'"
+					(click)="addTitle('Reports')">
+					<mat-icon color="primary">auto_graph</mat-icon> Reports
+				</a>
+		
+				<a mat-list-item *ngIf="DynamicNavBar.setting" mat-list-item [routerLink]="'/setting'"
+					(click)="addTitle('Setting')">
+					<mat-icon color="primary">settings</mat-icon> Setting
+				</a>
+
+				<a mat-list-item (click)="aboutApp()">
+					<mat-icon color="primary" >favorite</mat-icon> AboutApp
+				</a>
+
+			</mat-nav-list>
+
+		</mat-sidenav>
+		<!-- Main content -->
+		<mat-sidenav-content>
+			<router-outlet></router-outlet>
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+
+</div>

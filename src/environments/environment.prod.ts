@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: false,
+  baseUrl: 'http://165.232.116.89:8080/royaService/api'  
 };

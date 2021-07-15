@@ -1,0 +1,28 @@
+<nz-card nzTitle="Users " [nzExtra]="extraTemplate">
+
+    <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
+      <thead>
+        <tr>
+          <th>Department Name</th>
+          <th>Moderator1</th>
+          <th>Moderator2</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data">
+          <td>{{ data.departmentName }}</td>
+          <td>{{ data.users[0].username}}</td>
+          <td>{{ data.users[1]?.username}}</td>
+          <td>
+            <a class="btn text-danger" (click)="onDelete(data)">
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <ng-template #extraTemplate>
+    <button nz-button nzType="default" (click)="showModal()"><i nz-icon nzType="user-add"></i>Add
+      User</button>
+  </ng-template>
