@@ -1,0 +1,60 @@
+<nz-layout>
+  <nz-header>
+    <div class="logo">{{departmentName}}</div>
+    <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
+
+    </ul>
+  </nz-header>
+  <nz-content class="outer-content">
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>Home</nz-breadcrumb-item>
+      <nz-breadcrumb-item>List</nz-breadcrumb-item>
+      <nz-breadcrumb-item>App</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-layout class="inner-layout">
+      <nz-sider nzWidth="200px" nzTheme="light">
+        <ul nz-menu nzMode="inline" class="sider-menu">
+          <div class="row m-1 p-1 bg-light rounded justify-content-around">
+            <p class="mt-3 " style="font-size: 18px;">{{userName}}</p>
+            <button mat-icon-button color="accent" (click)="logout()">
+              <mat-icon>person</mat-icon>
+            </button>
+          </div>
+
+          <li nz-menu-item>
+            <i nz-icon nzType="heart"></i>
+            <span class="text-primary">Favorite Docs</span>
+          </li>
+
+          <li nz-submenu nzTitle="My Folders" nzIcon="folder-view" style="background-color: #969696; color:white;">
+            <ul>
+              <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">
+
+                <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                  {{node.name}}
+                </mat-tree-node>
+                <!-- This is the tree node template for expandable nodes -->
+                <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                  <div class="mat-tree-node">
+                    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                      <mat-icon class="mat-icon-rtl-mirror">
+                        {{treeControl.isExpanded(node) ? 'folder_open' : 'folder'}}
+                      </mat-icon>
+                    </button>
+                    {{node.name}}
+                  </div>
+                  <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
+                    <ng-container matTreeNodeOutlet></ng-container>
+                  </div>
+                </mat-nested-tree-node>
+              </mat-tree>
+            </ul>
+          </li>
+
+        </ul>
+      </nz-sider>
+
+      <nz-content class="inner-content">Content</nz-content>
+    </nz-layout>
+  </nz-content>
+</nz-layout>

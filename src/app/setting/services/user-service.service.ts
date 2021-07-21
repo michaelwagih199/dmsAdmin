@@ -15,6 +15,9 @@ export class UserServiceService {
     return this.http.get(`${this.baseUrl}`);
   }
 
+  create(object: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, object);
+  }
 
   delete(id: string) {
     return this.http.delete(`${this.baseUrl}/${id}`);

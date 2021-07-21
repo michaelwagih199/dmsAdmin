@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { UserModel } from '../../models/user';
+import { Role, UserModel } from '../../models/user';
 import { UserServiceService } from '../../services/user-service.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class UserComponent implements OnInit {
   validateForm!: FormGroup;
   user: UserModel = new UserModel();
   selectedRolesValue: any;
+  role: Role = new Role();
 
   constructor(
     private fb: FormBuilder,
@@ -44,6 +45,8 @@ export class UserComponent implements OnInit {
     this.isLoading = true;
     this.userService.findAll().subscribe(
       (users) => {
+        console.log(users);
+
         this.dataSet = users;
         this.isLoading = false;
       },
@@ -71,7 +74,11 @@ export class UserComponent implements OnInit {
 
   submitUserForm() {
     this.isLoading = true;
-    this.user.roles.push(this.selectedRolesValue);
+    this.role.name = this.selectedRolesValue;
+    this.role.description = this.selectedRolesValue;
+    this.user.roles.push(this.role);
+    // console.log(this.user);
+
     this.authService.create(this.user).subscribe(
       (post) => {
         this.isLoading = false;
@@ -81,6 +88,11 @@ export class UserComponent implements OnInit {
       },
       (err) => {
         this.isLoading = false;
+        this.isModalvisable = false;
+        if(err.error.message=="User already exist"){
+          this.createNotification('error', 'Error', 'User already exist');
+        }
+
       }
     );
   }

@@ -1,28 +1,78 @@
 <nz-card nzTitle="Users " [nzExtra]="extraTemplate">
 
-    <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
-      <thead>
-        <tr>
-          <th>Department Name</th>
-          <th>Moderator1</th>
-          <th>Moderator2</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of basicTable.data">
-          <td>{{ data.departmentName }}</td>
-          <td>{{ data.users[0].username}}</td>
-          <td>{{ data.users[1]?.username}}</td>
-          <td>
-            <a class="btn text-danger" (click)="onDelete(data)">
-              <i nz-icon nzType="delete" nzTheme="outline"></i>
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
-  </nz-card>
-  <ng-template #extraTemplate>
-    <button nz-button nzType="default" (click)="showModal()"><i nz-icon nzType="user-add"></i>Add
-      User</button>
+  <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
+    <thead>
+      <tr>
+        <th>Department Name</th>
+        <th>Moderator</th>
+        <!-- <th>Moderator2</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.departmentName }}</td>
+        <td>{{ data.user}}</td>
+        <!-- <td>{{ data.users[1]?.username}}</td> -->
+        <td>
+          <a class="btn text-danger" (click)="onDelete(data)">
+            <i nz-icon nzType="delete" nzTheme="outline"></i>
+          </a>
+          <a class="btn text-primary" (click)="toDepartmentAdmin(data)">
+            <i nz-icon nzType="folder-view" nzTheme="outline"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="showModal()"><i nz-icon nzType="user-add"></i>Add
+    Department</button>
+</ng-template>
+
+
+<!--add user-->
+<nz-modal [(nzVisible)]="isModalvisable" [nzTitle]="modalPvTitle" [nzContent]="modalDoctorContent"
+  [nzFooter]="modalPvFooter" (nzOnCancel)="handleCentermodal()">
+
+  <ng-template #modalPvTitle>
+    Add new Department
   </ng-template>
+
+  <ng-template #modalDoctorContent>
+
+    <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="departmentName" nzRequired>Department Name</nz-form-label>
+        <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Please input department!">
+          <input nz-input id="departmentName" formControlName="departmentName" placeholder="Department Name"
+            [(ngModel)]="department.departmentName" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5" nzFor="roles" nzRequired>Moderator</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please select User !">
+          <nz-select id="roles" formControlName="user" nzPlaceHolder="Moderator" [(ngModel)]="selecteUser"
+              (ngModelChange)="onOptionsSelected($event)">
+            <nz-option *ngFor="let item of userSet" nzValue="{{item.username}}" nzLabel="{{item.username}}">
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button nzType="primary" nzBlock [disabled]="!validateForm.valid">{{saveDepartmentCheck}}</button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+
+  </ng-template>
+
+  <ng-template #modalPvFooter>
+    <p class="text-center text-info"> Add Department </p>
+  </ng-template>
+
+</nz-modal>

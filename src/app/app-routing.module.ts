@@ -14,6 +14,10 @@ const routes: Routes = [
     path: 'setting',
     loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule),
   },
+  {
+    path: 'departmentAdmnin/:id',
+    loadChildren: () => import('./department-admin/department-admin.module').then(m => m.DepartmentAdminModule),
+  },
   
 ];
 

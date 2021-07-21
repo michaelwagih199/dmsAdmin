@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DepartmentsService {
+  
   private baseUrl = `${environment.baseUrl}/departments`;
 
   constructor(private http: HttpClient) {}
@@ -18,5 +19,14 @@ export class DepartmentsService {
   delete(id: string) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  create(object: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, object);
+  }
   
+  update(id: number, object: Object): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, object);
+  }
+
+
 }

@@ -1,0 +1,91 @@
+.logo {
+  width: max-content;
+  height: 50px;
+  margin: 5px;
+  float: left;
+  font-size: large;
+  font-family: 'El Messiri';
+  color: #ededed;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-right: solid 2px #ededed;
+}
+
+.header-menu {
+  line-height: 64px;
+}
+
+.outer-content {
+  padding: 0 20px;
+}
+
+.ant-layout-header {
+  height: 64px;
+  padding: 0 20px;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 64px;
+  background: #1686ca;
+}
+
+.ant-menu-dark .ant-menu-sub,
+.ant-menu.ant-menu-dark,
+.ant-menu.ant-menu-dark .ant-menu-sub {
+  color: rgba(255, 255, 255, 0.65);
+  background: #1686ca;
+}
+
+nz-breadcrumb {
+  margin: 16px 0;
+}
+
+.inner-layout {
+  background: #fff;
+}
+
+
+
+.sider-menu {
+  height: 86vh;
+  background-color: #666666;
+  // max-width: max-content;
+  min-width: max-content;
+  width: 200px;
+  // border-bottom: solid 10px #1686ca;
+
+}
+
+.inner-content {
+  padding: 0 24px;
+  min-height: 280px;
+  background-color: #ededed;
+
+}
+
+
+
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+/*
+ * This padding sets alignment of the nested nodes.
+ */
+.example-tree .mat-nested-tree-node div[role=group] {
+  padding-left: 40px;
+}
+
+/*
+ * Padding for leaf nodes.
+ * Leaf nodes need to have padding so as to align with other non-leaf nodes
+ * under the same parent.
+ */
+.example-tree div[role=group] > .mat-tree-node {
+  padding-left: 40px;
+}
