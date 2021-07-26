@@ -6,6 +6,7 @@ import { DepartmentAdminHomeComponent } from './components/department-admin-home
 import { LayoutDepartmentAdminComponent } from './components/layout-department-admin/layout-department-admin.component';
 import { SharedModule } from '../shared/shared.module';
 import { NavbarDepartmentAdminComponent } from './components/navbar-department-admin/navbar-department-admin.component';
+import { AddFolderComponent } from './components/dialogs/add-folder/add-folder.component';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { NavbarDepartmentAdminComponent } from './components/navbar-department-a
     DepartmentAdminHomeComponent,
     LayoutDepartmentAdminComponent,
     NavbarDepartmentAdminComponent,
+    AddFolderComponent,
   ],
   imports: [
     CommonModule,

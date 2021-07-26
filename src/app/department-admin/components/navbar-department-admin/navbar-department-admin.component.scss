@@ -1,3 +1,10 @@
+
+  $color_white: #fff;
+  $color_prime: #06445E;
+  $color_grey: #e2e2e2;
+  $color_grey_dark: #a2a2a2;
+  $color_blue_gray:#b0ddd8;
+  
 .logo {
   width: max-content;
   height: 50px;
@@ -41,27 +48,20 @@ nz-breadcrumb {
 .inner-layout {
   background: #fff;
 }
-
-
-
 .sider-menu {
-  height: 86vh;
-  background-color: #666666;
-  // max-width: max-content;
+  height: 80vh;
+  background-color: $color_blue_gray;
   min-width: max-content;
   width: 200px;
-  // border-bottom: solid 10px #1686ca;
-
+  border-radius: 3px 3px;
 }
 
 .inner-content {
   padding: 0 24px;
   min-height: 280px;
   background-color: #ededed;
-
+  margin-top: 5px;
 }
-
-
 
 .example-tree-invisible {
   display: none;
@@ -88,4 +88,13 @@ nz-breadcrumb {
  */
 .example-tree div[role=group] > .mat-tree-node {
   padding-left: 40px;
+}
+
+.headerController{
+  margin-top: 5px;
+  display:flex;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  
 }

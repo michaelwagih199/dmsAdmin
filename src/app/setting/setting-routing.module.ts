@@ -4,6 +4,7 @@ import { LayoutComponent } from '../shared/components';
 import { AuthGaurdService } from '../core/services/auth-gaurd.service';
 import { SettingComponent } from './components/setting/setting.component';
 import { UserComponent } from './components/user/user.component';
+import { DocPlacesComponent } from './components/doc-places/doc-places.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,10 @@ const routes: Routes = [
       {
         path: 'users',
         component: UserComponent,canActivate:[AuthGaurdService]
+      },
+      {
+        path: 'docPlaces',
+        component: DocPlacesComponent,canActivate:[AuthGaurdService]
       },
       
     ]

@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class UserServiceService {
+  
   private baseUrl = `${environment.baseUrl}/users`;
-
   constructor(private http: HttpClient) {}
 
   findAll(): Observable<any> {

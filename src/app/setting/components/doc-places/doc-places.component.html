@@ -1,0 +1,75 @@
+<nz-card nzTitle="Users " [nzExtra]="extraTemplate">
+
+    <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th>Code Places</th>
+                <th>Department Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <td>{{ data?.codePlace }}</td>
+                <td>{{ data.department?.departmentName }}</td>
+                <td>
+                    <a class="btn text-danger" (click)="onDelete(data)">
+                        <i nz-icon nzType="delete" nzTheme="outline"></i>
+                    </a>
+
+                    <a class="btn text-primary" (click)="onEdite(data)">
+                        <i nz-icon nzType="edit" nzTheme="outline"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<ng-template #extraTemplate>
+    <button nz-button nzType="default" (click)="showModal()"><i nz-icon nzType="user-add"></i>Add
+        Code</button>
+</ng-template>
+
+
+<!--add code Places-->
+<nz-modal [(nzVisible)]="isModalvisable" [nzTitle]="modalPvTitle" [nzContent]="modalDoctorContent"
+    [nzFooter]="modalPvFooter" (nzOnCancel)="handleCentermodal()">
+
+    <ng-template #modalPvTitle>
+        Add new Code
+    </ng-template>
+
+    <ng-template #modalDoctorContent>
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+            <nz-form-item>
+                <nz-form-label [nzSm]="4" [nzXs]="24" nzFor="username" nzRequired>Code</nz-form-label>
+                <nz-form-control [nzSm]="12" [nzXs]="24" nzErrorTip="Please input Code!">
+                    <input nz-input id="username" formControlName="code" placeholder="Code"
+                        [(ngModel)]="codePlace.codePlace" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Department</mat-label>
+                <mat-select matNativeControl required [(ngModel)]="selectedDepartment"
+                    formControlName="department">
+                    <mat-option *ngFor="let item of departmentSet" [value]="item.id">
+                        {{item.departmentName}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" nzBlock [disabled]="!validateForm.valid">{{saveCodeCheck}}</button>
+                </nz-form-control>
+            </nz-form-item>
+
+        </form>
+    </ng-template>
+
+    <ng-template #modalPvFooter>
+        <p class="text-center text-info"> Add Code Places </p>
+    </ng-template>
+
+</nz-modal>
