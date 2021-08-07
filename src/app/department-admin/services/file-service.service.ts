@@ -6,7 +6,9 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
+
 export class FileServiceService {
+
   private baseUrl = `${environment.baseUrl}/files`;
 
   constructor(private http: HttpClient) {}
@@ -18,6 +20,7 @@ export class FileServiceService {
   getImage(imageUrl: string): Observable<Blob> {
     return this.http.get(imageUrl, { responseType: 'blob' });
   }
+
 
 
 }

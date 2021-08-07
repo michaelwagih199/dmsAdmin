@@ -14,6 +14,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialog } from 'src/app/shared/components/layout/dialog/confirmation/confirmation.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doc-places',
@@ -37,7 +38,9 @@ export class DocPlacesComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private docPlacesService: DocPlacesService,
-    private departmentService: DepartmentsService
+    private departmentService: DepartmentsService,
+    private router: Router
+
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +63,15 @@ export class DocPlacesComponent implements OnInit {
       (err) => {
         this.isLoading = false;
         console.log(err);
+        if (err.statusText == 'Forbidden') {
+          this.createNotification(
+            'error',
+            'error',
+            'You cant access this page'
+          );
+          this.reloadPage('admin');
+        }
+        this.isLoading = false;
       }
     );
   }
@@ -194,6 +206,12 @@ export class DocPlacesComponent implements OnInit {
 
   createNotification(type: string, title: string, description: any): void {
     this.notification.create(type, title, description);
+  }
+
+
+
+  reloadPage(url: any) {
+    this.router.navigateByUrl(`/${url}`);
   }
 
 }

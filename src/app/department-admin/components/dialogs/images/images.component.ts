@@ -32,7 +32,18 @@ export class ImagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getImageFromService();
+    this.isLoading = true;
+    this.service.getImageByName(this.cycleId).subscribe(
+      (response) => {
+        this.isLoading = false;
+        this.fileName = response.fileName;
+        this.url = `${this.baseUrl}/download/${response.fileName}`
+        this.getImageFromService();
+      },
+      (error) => {
+        console.log(error);
+      }
+    )
   }
 
   getImageFromService() {
@@ -66,7 +77,7 @@ export class ImagesComponent implements OnInit {
 
   onDocsDownload() {
     this.isLoading = true;
-    this.service.getImageByName(this.fileName).subscribe((response) => {
+    this.service.getImage(this.url).subscribe((response) => {
       this.isLoading = false;
       let blob: any = new Blob([response], {
         type: 'text/json; charset=utf-8',

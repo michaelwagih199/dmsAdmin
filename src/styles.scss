@@ -270,7 +270,7 @@ nz-table {
   font-weight: 500;
   font-size: large;
   font-family: 'El Messiri', sans-serif;
-  background:#3F51B5;
+  background:#1686CA;
   border-bottom: 1px solid #e8e8e8;
   border-radius: 3px 3px 0 0;
   zoom: 1;
@@ -287,6 +287,27 @@ nz-table {
   font-family: 'cairo', sans-serif;
 
 }
+
+
+
+.flex-1{
+  flex-grow: 1;
+  margin: 0px 8px 0px 8px;
+  align-self: center;
+}
+.flex-2{
+  flex-grow: 2;
+  margin: 0px 8px 0px 8px;
+  align-self: center;
+
+
+}
+.flex-3{
+  flex-grow: 3;
+  margin: 0px 8px 0px 8px;
+
+}
+
 
 
 

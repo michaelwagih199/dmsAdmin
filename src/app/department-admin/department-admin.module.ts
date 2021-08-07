@@ -7,6 +7,8 @@ import { LayoutDepartmentAdminComponent } from './components/layout-department-a
 import { SharedModule } from '../shared/shared.module';
 import { NavbarDepartmentAdminComponent } from './components/navbar-department-admin/navbar-department-admin.component';
 import { AddFolderComponent } from './components/dialogs/add-folder/add-folder.component';
+import { DocTypeComponent } from './components/dialogs/doc-type/doc-type.component';
+import { AddDocsComponent } from './components/dialogs/add-docs/add-docs.component';
 
 
 @NgModule({
@@ -15,6 +17,8 @@ import { AddFolderComponent } from './components/dialogs/add-folder/add-folder.c
     LayoutDepartmentAdminComponent,
     NavbarDepartmentAdminComponent,
     AddFolderComponent,
+    DocTypeComponent,
+    AddDocsComponent,
   ],
   imports: [
     CommonModule,

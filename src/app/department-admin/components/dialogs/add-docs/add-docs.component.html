@@ -1,0 +1,101 @@
+<div class="container">
+    <div class="row justify-content-lg-between">
+        <div class="col">
+            <h4>Add Docs</h4>
+        </div>
+        <div class="col">
+            <button mat-icon-button color="primary" (click)="close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<mat-dialog-content>
+    <div *ngFor="let item of breadcrumbList">
+        <div class="container bg-dark rounded mt-3">
+            <div class="row">
+                <div class="col">
+                    <p class="text-white">Folder: </p>
+                </div>
+                <div class="col">
+                    <p class="rounded text-white">{{item.name}}</p>
+                    <!-- <p class="rounded text-white">{{item.id}}</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="validateForm">
+        <div class="container-fluid mt-2">
+            <nz-divider nzText="Docment Info" nzOrientation="left"></nz-divider>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Title</mat-label>
+                        <input matInput required placeholder="Title" formControlName="docTitle"
+                            [(ngModel)]="docs.docTitle" autocomplete="off">
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Owner</mat-label>
+                        <input matInput required placeholder="Document Owner" formControlName="docOwner"
+                            [(ngModel)]="docs.docOwner" autocomplete="off">
+                    </mat-form-field>
+                </div>
+
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Docments Date</mat-label>
+                        <input matInput required [matDatepicker]="picker" formControlName="dateInDoc"
+                            [(ngModel)]="docs.dateInDoc" autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Place Code</mat-label>
+                        <mat-select matNativeControl required [(ngModel)]="docs.docsPlacesId"
+                            formControlName="docsPlacesId">
+                            <mat-option *ngFor="let item of docsPlaces" [value]="item.id">
+                                {{item.codePlace}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Place Type</mat-label>
+                        <mat-select matNativeControl required [(ngModel)]="docs.docsTypeId"
+                            formControlName="docsTypeId">
+                            <mat-option *ngFor="let item of docTypeList" [value]="item.id">
+                                {{item.type}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label> Comments </mat-label>
+                        <input matInput appearance="outline" class="full-width" placeholder="comments" type="text"
+                            formControlName="comments" [(ngModel)]="docs.comment" autocomplete="off">
+                    </mat-form-field>
+                </div>
+            </div>
+            <nz-divider nzText="Docment " nzOrientation="left"></nz-divider>
+            <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" >
+                <button *ngIf="isUploadImpty" nzBlock nz-button><i nz-icon nzType="upload"></i>Select File</button>
+            </nz-upload>
+            <p>{{docs.fileName}}</p>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button nz-button [nzType]="'primary'" [nzLoading]="uploading" [disabled]="!validateForm.valid && !isUploadImpty"
+        (click)="uploadImage()" [disabled]="fileList.length == 0" style="margin-top: 16px">
+        {{ uploading ? 'Uploading' : 'Save Docs' }}
+    </button>
+</mat-dialog-actions>
