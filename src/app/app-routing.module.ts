@@ -18,7 +18,10 @@ const routes: Routes = [
     path: 'departmentAdmnin/:id',
     loadChildren: () => import('./department-admin/department-admin.module').then(m => m.DepartmentAdminModule),
   },
-  
+  {
+    path: 'printing',
+    loadChildren: () => import('./printing/printing.module').then(m => m.PrintingModule),
+  },
 ];
 
 @NgModule({

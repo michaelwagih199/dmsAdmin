@@ -18,14 +18,19 @@
 			[fixedTopGap]>
 			<mat-nav-list>
 				
-				<a *ngIf="DynamicNavBar.patients" mat-list-item [routerLink]="'/admin/department'"
+				<a *ngIf="DynamicNavBar.department" mat-list-item [routerLink]="'/admin/department'"
 					(click)="addTitle('Departments')">
 					<mat-icon color="primary">person</mat-icon> Departments
 				</a>
 
-				<a *ngIf="DynamicNavBar.reports" mat-list-item [routerLink]="'/admin/reports'"
-					(click)="addTitle('Reports')">
-					<mat-icon color="primary">auto_graph</mat-icon> Reports
+				<a *ngIf="DynamicNavBar.myDepartment" mat-list-item [routerLink]="'/admin/'"
+					(click)="myFolder('My Departments')">
+					<mat-icon color="primary">person</mat-icon> My Folders
+				</a>
+
+				<a mat-list-item [routerLink]="'/setting/docPlaces'"
+					(click)="addTitle('Places Codes')">
+					<mat-icon color="primary">auto_graph</mat-icon>Places Codes
 				</a>
 		
 				<a mat-list-item *ngIf="DynamicNavBar.setting" mat-list-item [routerLink]="'/setting'"

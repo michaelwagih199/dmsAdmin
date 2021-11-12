@@ -36,6 +36,10 @@ export class AddFolderComponent implements OnInit {
   close() {
       this.dialogRef.close();
   }
+  
+  onConfirmClick(): void {
+    this.dialogRef.close(true);
+  }
 
   
 }

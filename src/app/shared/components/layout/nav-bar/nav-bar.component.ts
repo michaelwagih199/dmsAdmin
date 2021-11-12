@@ -4,6 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { MyFolderComponent } from 'src/app/department-admin/components/dialogs/my-folder/my-folder.component';
 import { AboutAppDialogComponent } from '../dialog/about-app-dialog/about-app-dialog.component';
 
 @Component({
@@ -15,12 +16,9 @@ export class NavBarComponent implements OnInit {
   userName: any;
 
   DynamicNavBar = {
-    patients: true,
-    centers: true,
-    medication: true,
-    centerAdmin: true,
-    reports: true,
+    department: true,
     setting: true,
+    myDepartment: true,
   };
 
   opened = true;
@@ -36,17 +34,17 @@ export class NavBarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let userPermission = sessionStorage.getItem('auth-permission');
-    // this.userName = JSON.parse(sessionStorage.getItem("userName"))
-
+    let userPermission = sessionStorage.getItem('user-roles');
     this.userName = sessionStorage.getItem('userName')?.toString();
-    if (userPermission?.includes('fullPermission')) {
-      this.DynamicNavBar.reports = true;
-      this.DynamicNavBar.setting = true;
-      console.log(true);
-    } else {
-      
 
+    if (userPermission?.includes('mod')) {
+      this.DynamicNavBar.department = false;
+      this.DynamicNavBar.setting = false;
+      this.DynamicNavBar.myDepartment = true;
+    } else {
+      this.DynamicNavBar.department = true;
+      this.DynamicNavBar.department = true;
+      this.DynamicNavBar.myDepartment = false;
     }
 
     console.log(window.innerWidth);
@@ -97,6 +95,14 @@ export class NavBarComponent implements OnInit {
 
   addTitle(title: any) {
     this.screenTitle = title;
+  }
+
+  myFolder(title: any) {
+    this.screenTitle = title;
+    const dialogRef = this.dialog.open(MyFolderComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   logout() {

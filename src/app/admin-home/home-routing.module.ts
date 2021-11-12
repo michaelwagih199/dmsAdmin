@@ -4,6 +4,7 @@ import { LayoutComponent } from '../shared/components';
 import { AuthGaurdService } from '../core/services/auth-gaurd.service';
 import { AdminHomeComponent } from './components/home/home.component';
 import { DepartmentComponent } from './components/department/department.component';
+import { DocCodesComponent } from './components/reports/doc-codes/doc-codes.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
       {
         path: 'department',
         component: DepartmentComponent,
+        canActivate: [AuthGaurdService],
+      },
+      {
+        path: 'reports',
+        component: DocCodesComponent,
         canActivate: [AuthGaurdService],
       },
     ],

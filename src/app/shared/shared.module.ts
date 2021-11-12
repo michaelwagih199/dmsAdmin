@@ -9,10 +9,11 @@ import { NgMaterialModule } from './components/ng-material/ng-material.module';
 import { ConfirmationDialog } from './components/layout/dialog/confirmation/confirmation.component';
 import { AboutAppDialogComponent } from './components/layout/dialog/about-app-dialog/about-app-dialog.component';
 import { NgZorroModule } from './components/ng-zorro/ng-zorro.module';
-import { ImagesComponent } from './components/layout/dialog/images/images.component';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxBarcodeModule } from 'ngx-barcode';
+import { QRCodeModule } from 'angular2-qrcode';
 @NgModule({
-  declarations: [...fromComponents.components, ConfirmationDialog,ImagesComponent, AboutAppDialogComponent],
+  declarations: [...fromComponents.components, ConfirmationDialog, AboutAppDialogComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -23,7 +24,8 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     NgMaterialModule,
     NgxPaginationModule,
     NgZorroModule,
-    NgbCarouselModule
+    NgbCarouselModule,
+    QRCodeModule
    ],
   exports: [   
     CommonModule,
@@ -34,7 +36,9 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     NgMaterialModule,
     NgxPaginationModule,
     NgZorroModule,
-    NgbCarouselModule
+    NgbCarouselModule,
+    NgxBarcodeModule,
+    QRCodeModule
   ]
 })
 export class SharedModule { }

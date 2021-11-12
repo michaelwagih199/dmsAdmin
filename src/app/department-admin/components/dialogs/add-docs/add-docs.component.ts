@@ -12,6 +12,8 @@ import { DocTypeService } from 'src/app/department-admin/services/doc-type.servi
 import { DocsService } from 'src/app/department-admin/services/docs.service';
 import { CodePlacesModel } from 'src/app/setting/models/docPlaces';
 import { DocPlacesService } from 'src/app/setting/services/doc-places.service';
+import { LogsService } from 'src/app/shared/service/logs.service';
+import { environment } from 'src/environments/environment';
 import { DocsModel } from '../../../models/docsModel';
 
 interface FolderStructure {
@@ -34,11 +36,16 @@ export class AddDocsComponent implements OnInit {
   docTypeList!: DocTypeModel[];
   isLoading: boolean = false;
   isUpdate: boolean = false;
-
+  imagesType: string = `application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
+  text/plain, application/pdf, image/*`;
   /**upload file */
   uploading = false;
   isUploadImpty: boolean = true;
   fileList: NzUploadFile[] = [];
+  docsPlacesSelected: any;
+  docsTypeSelected: any;
+  private baseUrl = `${environment.baseUrl}`;
+
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +57,7 @@ export class AddDocsComponent implements OnInit {
     private http: HttpClient,
     private msg: NzMessageService,
     private _snackBar: MatSnackBar,
+    private logs_service: LogsService,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data.model) {
@@ -105,6 +113,16 @@ export class AddDocsComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onDocsPlaceChange(value: any) {
+    console.log(value);
+    this.docs.docsPlaces = value;
+  }
+
+  onDocTypeChange(value: any) {
+    console.log(value);
+    this.docs.docsType = value;
+  }
+
   uploadImage() {
     if (this.isUpdate) {
       this.isLoading = true;
@@ -112,17 +130,17 @@ export class AddDocsComponent implements OnInit {
       this.docs.departmentId = this.departmentId;
       this.docs.parentId =
         this.breadcrumbList[this.breadcrumbList.length - 1].id;
+
       let nDocs = {
         docCode: this.docs.docCode,
         docTitle: this.docs.docTitle,
         docOwner: this.docs.docOwner,
-        dateInDoc: this.docs.dateInDoc,
         parentId: this.docs.parentId,
-        docsPlacesId: this.docs.docsPlacesId,
-        docsTypeId: this.docs.docsTypeId,
+        docsPlaces: this.docs.docsPlaces,
+        docsType: this.docs.docsType,
         departmentId: this.docs.departmentId,
-        comment:this.docs.comment,
-        fileName:this.docs.fileName,
+        comment: this.docs.comment,
+        fileName: this.docs.fileName,
       };
       formData.append('docs', JSON.stringify(nDocs));
       // tslint:disable-next-line:no-any
@@ -134,7 +152,7 @@ export class AddDocsComponent implements OnInit {
       // You can use any AJAX library you like
       const req = new HttpRequest(
         'PUT',
-        `http://localhost:8080/api/docs/${this.docs.id}`,
+        `${this.baseUrl}/docs/${this.docs.id}`,
         formData,
         {
           // reportProgress: true
@@ -148,6 +166,7 @@ export class AddDocsComponent implements OnInit {
             this.uploading = false;
             this.fileList = [];
             this.msg.success('upload successfully.');
+            this.logsEvent(`Updated New Docment : ${this.docs.docTitle}`);
           },
           () => {
             this.uploading = false;
@@ -157,9 +176,11 @@ export class AddDocsComponent implements OnInit {
     } else {
       this.isLoading = true;
       const formData = new FormData();
+
       this.docs.departmentId = this.departmentId;
       this.docs.parentId =
         this.breadcrumbList[this.breadcrumbList.length - 1].id;
+
       formData.append('docs', JSON.stringify(this.docs));
       // tslint:disable-next-line:no-any
       this.fileList.forEach((file: any) => {
@@ -170,7 +191,7 @@ export class AddDocsComponent implements OnInit {
       // You can use any AJAX library you like
       const req = new HttpRequest(
         'POST',
-        `http://localhost:8080/api/docs/upload`,
+        `${this.baseUrl}/docs/upload`,
         formData,
         {
           // reportProgress: true
@@ -184,6 +205,7 @@ export class AddDocsComponent implements OnInit {
             this.uploading = false;
             this.fileList = [];
             this.msg.success('upload successfully.');
+            this.logsEvent(`Updated New Docment : ${this.docs.docTitle}`);
           },
           () => {
             this.uploading = false;
@@ -204,11 +226,14 @@ export class AddDocsComponent implements OnInit {
     this.validateForm = this.fb.group({
       docTitle: ['', [Validators.required]],
       docOwner: ['', [Validators.required]],
-      dateInDoc: ['', [Validators.required]],
       docsPlacesId: ['', [Validators.required]],
       docsTypeId: ['', [Validators.required]],
       comments: [''],
     });
+  }
+
+  logsEvent(message: string) {
+    this.logs_service.create(message).subscribe();
   }
 
   createNotification(type: string, title: string, description: any): void {
@@ -219,5 +244,15 @@ export class AddDocsComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  formatDate(date: any) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
 }

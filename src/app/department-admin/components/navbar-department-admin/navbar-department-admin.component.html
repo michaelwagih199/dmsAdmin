@@ -1,53 +1,68 @@
-<nz-layout>
-  <nz-header>
-
-    <div class="logo">{{department.departmentName}}</div>
-    <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
-      <div class="headerController">
-        <div>
-          <button mat-mini-fab color="primary" (click)="toHome()">
-            <mat-icon>home</mat-icon>
-          </button>
-        </div>
-        
-        <div>
-
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Filter By Docment Type" [(ngModel)]="docmentTypeSelected">
-            <nz-option *ngFor="let option of docmentTypeSet" [nzLabel]="option.type" [nzValue]="option.id"></nz-option>
-          </nz-select>
-
-        </div>
-        <div>
-          <button mat-mini-fab color="primary">
-            <mat-icon (click)="createFolder()">manage_search</mat-icon>
-          </button>
-        </div>
-        <div>
-          <button mat-mini-fab color="primary">
-            <mat-icon (click)="uploadFile()">file_upload</mat-icon>
-          </button>
-        </div>
-        <div>
-          <button mat-mini-fab color="primary">
-            <mat-icon (click)="createFolder()">create_new_folder</mat-icon>
-          </button>
-        </div>
+<nz-header>
+  <div class="logo">{{department.departmentName}}</div>
+  <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">
+    <div class="headerController">
+      <div>
+        <button mat-mini-fab color="primary" matTooltip="Go to home" (click)="toHome()">
+          <mat-icon>home</mat-icon>
+        </button>
       </div>
 
-    </ul>
+      <div>
+        <button mat-mini-fab color="primary" matTooltip=" Search In Docs" (click)="search()">
+          <mat-icon>manage_search</mat-icon>
+        </button>
+      </div>
 
-  </nz-header>
-  <nz-content class="outer-content">
-    <mat-progress-bar class="m-2" color="accent" mode="indeterminate" *ngIf="isLoading" value="20"></mat-progress-bar>
+      <div>
+        <button mat-mini-fab color="accent" matTooltip="Multible Search In Docs" (click)="multibleSearch()">
+          <mat-icon>manage_search</mat-icon>
+        </button>
+      </div>
 
-    <nz-breadcrumb *ngFor="let item of breadcrumbList">
-      <nz-breadcrumb-item><a>{{item.name}}</a></nz-breadcrumb-item>
-      <button mat-icon-button *ngIf="item.name!='ParentFolder'" color="primary" (click)="deleteDialog(item)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </nz-breadcrumb>
+      <div>
+        <button mat-mini-fab color="primary" matTooltip="Sort By Name">
+          <mat-icon (click)="sortList()">sort</mat-icon>
+        </button>
+      </div>
 
-    <nz-layout class="inner-layout">
+      <div>
+        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Filter By Docment Type"
+          (ngModelChange)="onFilterTypeChange($event)" [(ngModel)]="docmentTypeSelected">
+          <nz-option *ngFor="let option of docmentTypeSet" [nzLabel]="option.type" [nzValue]="option.id"></nz-option>
+        </nz-select>
+      </div>
+
+
+
+      <div>
+        <button mat-mini-fab color="primary" matTooltip="Upload Docs">
+          <mat-icon (click)="uploadFile()">file_upload</mat-icon>
+        </button>
+      </div>
+
+      <div>
+        <button mat-mini-fab color="primary" matTooltip="Create New Directory">
+          <mat-icon (click)="createFolder()">create_new_folder</mat-icon>
+        </button>
+      </div>
+    </div>
+  </ul>
+</nz-header>
+
+
+<mat-progress-bar class="m-2" color="accent" mode="indeterminate" *ngIf="isLoading" value="20"></mat-progress-bar>
+
+<nz-breadcrumb *ngFor="let item of breadcrumbList">
+  <nz-breadcrumb-item><a>{{item.name}}</a></nz-breadcrumb-item>
+  <button mat-icon-button *ngIf="item.name!='ParentFolder'" color="primary" (click)="deleteFolderDialog(item)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</nz-breadcrumb>
+
+<div class="container-fluid">
+  <div class="row mt-2 ">
+    <div class="col-2">
       <nz-sider nzWidth="200px" nzTheme="light">
         <ul nz-menu nzMode="inline" class="sider-menu">
           <div class="row m-1 p-1 bg-light rounded justify-content-around">
@@ -58,9 +73,9 @@
           </div>
 
           <!-- <li nz-menu-item>
-            <i nz-icon nzType="heart"></i>
-            <span class="text-primary">Favorite Docs</span>
-          </li> -->
+                  <i nz-icon nzType="heart"></i>
+                  <span class="text-primary">Favorite Docs</span>
+                </li> -->
 
           <li nz-menu-item (click)="addDocType()">
             <i nz-icon nzType="setting"></i>
@@ -88,9 +103,6 @@
                     </button>
                     {{node.name}}
                   </div>
-
-                
-
                   <div [class.example-tree-invisible]="!treeControl.isExpanded(node)" role="group">
                     <ng-container matTreeNodeOutlet></ng-container>
                   </div>
@@ -101,59 +113,64 @@
 
         </ul>
       </nz-sider>
-
-      <nz-content class="inner-content">
-        <nz-card nzTitle="Docments">
-          <nz-table #basicTable [nzData]="docsSets">
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Title</th>
-                <th>Owner</th>
-                <th>Doc Date</th>
-                <th>Place Code</th>
-                <th>Type</th>
-                <th>Comment</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of basicTable.data">
-                <td>{{ data.docCode }}</td>
-                <td>{{ data.docTitle}}</td>
-                <td>{{ data.docOwner}}</td>
-                <td>{{ data.dateInDoc  | date: 'dd/MM/yyyy' }}</td>
-                <td>{{ data.docsPlacesCode}}</td>
-                <td>{{ data.docsType}}</td>
-                <td>{{ data.comment}}</td>
-                <td>
-                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                    <mat-icon>more_vert</mat-icon>
+    </div>
+    <div class="col-10">
+      <nz-card nzTitle="Docments" style="width: 100%;">
+        <nz-table #basicTable [nzData]="docsSets" style="width: 100%;">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Title</th>
+              <th>Owner</th>
+              <th>Doc Date</th>
+              <th>Place Code</th>
+              <th>Type</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of basicTable.data">
+              <td>{{ data.docCode }}</td>
+              <td>{{ data.docTitle}}</td>
+              <td>{{ data.docOwner}}</td>
+              <td>{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ data.docsPlaces?.codePlace}}</td>
+              <td>{{ data.docsType?.type}}</td>
+              <td>{{ data.comment}}</td>
+              <td>
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="viewImage(data)">
+                    <mat-icon>image</mat-icon>
+                    <span>View </span>
                   </button>
-                  <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="viewImage(data)">
-                      <mat-icon>image</mat-icon>
-                      <span>View </span>
-                    </button>
-                    <button mat-menu-item (click)="editeDocs(data)">
-                      <mat-icon>edit</mat-icon>
-                      <span>Edit </span>
-                    </button>
-                    <button mat-menu-item (click)="deleteDoc(data)">
-                      <mat-icon>delete</mat-icon>
-                      <span>Delete </span>
-                    </button>
-                    <button mat-menu-item>
-                      <mat-icon>published_with_changes</mat-icon>
-                      <span>Move</span>
-                    </button>
-                  </mat-menu>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
-        </nz-card>
-      </nz-content>
+                  <button mat-menu-item (click)="editeDocs(data)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit </span>
+                  </button>
+                  <button mat-menu-item (click)="deleteDoc(data)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete </span>
+                  </button>
+                  <button mat-menu-item (click)="moveDoc(data)">
+                    <mat-icon>published_with_changes</mat-icon>
+                    <span>Move</span>
+                  </button>
 
-    </nz-layout>
-  </nz-content>
-</nz-layout>
+                  <button mat-menu-item (click)="onBarcode(data)">
+                    <mat-icon>qr_code_scanner</mat-icon>
+                    <span>QrCode</span>
+                  </button>
+
+                </mat-menu>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+    </div>
+  </div>
+</div>

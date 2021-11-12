@@ -8,13 +8,13 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDepartmentAdminComponent,
-    children: [
-      {
-        path: '',
-        component: DepartmentAdminHomeComponent,
-        canActivate: [AuthGaurdService],
-      },
-    ],
+    // children: [
+    //   {
+    //     path: '',
+    //     component: DepartmentAdminHomeComponent,
+    //     canActivate: [AuthGaurdService],
+    //   },
+    // ],
   },
 ];
 

@@ -80,7 +80,7 @@
         <nz-form-label [nzSpan]="5" nzFor="roles" nzRequired>Roles</nz-form-label>
         <nz-form-control [nzSpan]="12" nzErrorTip="Please select User Roles!">
           <nz-select id="roles" formControlName="roles" nzPlaceHolder="User Roles" [(ngModel)]="selectedRolesValue">
-            <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+            <nz-option nzValue="ROLE_ADMIN" nzLabel="Admin"></nz-option>
             <nz-option nzValue="mod" nzLabel="Moderator"></nz-option>
           </nz-select>
         </nz-form-control>

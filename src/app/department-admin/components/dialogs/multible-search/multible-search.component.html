@@ -1,0 +1,34 @@
+<div>
+    <p class="title"> Multible Search</p>
+</div>
+<hr>
+<mat-dialog-content>
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isLoading" value="20"></mat-progress-bar>
+   
+    <div class="flex-container">
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title Search</mat-label>
+            <input type="text" matInput [formControl]="titleControl" [matAutocomplete]="auto" [(ngModel)]="titleValue">
+            <mat-icon color="accent" matSuffix>search</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="titleDisplay">
+                <mat-option *ngFor="let option of filteredTitleOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Owner Search</mat-label>
+            <input type="text" matInput [formControl]="ownerControl" [matAutocomplete]="title" [(ngModel)]="ownerValue">
+            <mat-icon color="accent" matSuffix>search</mat-icon>
+            <mat-autocomplete #title="matAutocomplete" [displayWith]="ownerDisplay">
+                <mat-option *ngFor="let option of filteredOwnerOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+    </div>
+    <button mat-raised-button color="primary" class="elmessiri-font" (click)="search()">Search</button>
+</mat-dialog-content>

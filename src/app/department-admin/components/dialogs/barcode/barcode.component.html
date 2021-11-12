@@ -1,0 +1,20 @@
+<div class="doNotPrint">
+    <h2 mat-dialog-title> Document Code</h2>
+</div>
+<hr>
+
+<mat-dialog-content>
+    <div class="myDivToPrint">
+        <h2 class="title"> Doc Title : {{model.docTitle}}</h2>
+        <!-- <ngx-barcode style="width: 30mm ;height: 15mm;" [bc-value]="code" [bc-display-value]="true">
+        </ngx-barcode> -->
+        <qr-code [value]="code" [size]="200"></qr-code>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+    <div class="doNotPrint">
+        <button mat-raised-button color="warn" (click)="onPrint()">Print</button>
+        <button mat-raised-button color="primary" (click)="close()" tabindex="1">Cancel</button>
+    </div>
+</mat-dialog-actions>

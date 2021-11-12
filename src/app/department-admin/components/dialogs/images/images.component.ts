@@ -27,23 +27,24 @@ export class ImagesComponent implements OnInit {
   ) {
     if (data != null) {
       this.fileName = data;
+      console.log(data);
     } else {
     }
   }
 
   ngOnInit(): void {
-    this.isLoading = true;
-    this.service.getImageByName(this.cycleId).subscribe(
-      (response) => {
-        this.isLoading = false;
-        this.fileName = response.fileName;
-        this.url = `${this.baseUrl}/download/${response.fileName}`
-        this.getImageFromService();
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
+    // this.isLoading = true;
+    // this.service.getImageByName(this.cycleId).subscribe(
+    //   (response) => {
+    //     this.isLoading = false;
+    //     this.fileName = response.fileName;
+    //     this.url = `${this.baseUrl}/download/${response.fileName}`
+    //     this.getImageFromService();
+    //   },
+    //   (error) => {
+    //     console.log(error);
+    //   }
+    // )
   }
 
   getImageFromService() {
@@ -75,10 +76,10 @@ export class ImagesComponent implements OnInit {
     }
   }
 
+
   onDocsDownload() {
     this.isLoading = true;
-    this.service.getImage(this.url).subscribe((response) => {
-      this.isLoading = false;
+    this.service.getfile(this.fileName).subscribe((response) => {
       let blob: any = new Blob([response], {
         type: 'text/json; charset=utf-8',
       });
@@ -86,12 +87,13 @@ export class ImagesComponent implements OnInit {
       //window.open(url);
       //window.location.href = response.url;
       fileSaver.saveAs(blob, this.fileName);
-      // this.loading = false
-    });
+      this.isLoading = false;
+    }),
+      () => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
   }
 
   close() {
     this.dialogRef.close();
   }
-
 }
