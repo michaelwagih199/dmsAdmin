@@ -207,6 +207,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
         this.getAllDocTypeById();
         this.docsSets = [];
         this.dialog.closeAll();
+        this.getParentDocs(this.nodeId);
       });
     } else {
       this.createNotification(
@@ -495,6 +496,10 @@ export class NavbarDepartmentAdminComponent implements OnInit {
         a.remove();
       }
     });
+  }
+
+  multiDelete(){
+    
   }
 
   toHome() {
