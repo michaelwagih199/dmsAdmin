@@ -1,0 +1,44 @@
+<div>
+    <p class="title">Search Component</p>
+</div>
+<hr>
+<mat-dialog-content>
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isLoading" value="20"></mat-progress-bar>
+    <form >
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Document Search</mat-label>
+            <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" [(ngModel)]="searchInout"
+                (keyup.enter)="search()">
+            <mat-icon color="accent" matSuffix>search</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                    (click)="OnHumanSelected(searchInout)">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </form>
+
+    <div>
+        <nz-divider nzText="Search Filter" nzOrientation="left"></nz-divider>
+        <div class="flexContainer">
+            <div class="flexItem" (click)="onFilterelected('code')">
+                <nz-divider nzText="Search By" nzOrientation="left"></nz-divider>
+                <p> Code</p>
+            </div>
+            <div class="flexItem" (click)="onFilterelected('title')">
+                <nz-divider nzText="Search By" nzOrientation="left"></nz-divider>
+                <p> Title</p>
+            </div>
+            <div class="flexItem" (click)="onFilterelected('owner')">
+                <nz-divider nzText="Search By" nzOrientation="left"></nz-divider>
+                <p>Owner</p>
+            </div>
+            <div class="flexItem" (click)="onFilterelected('dates')">
+                <nz-divider nzText="Search By" nzOrientation="left"></nz-divider>
+                <p> Date</p>
+            </div>
+        </div>
+    </div>
+
+</mat-dialog-content>

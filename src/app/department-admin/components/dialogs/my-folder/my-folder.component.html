@@ -1,0 +1,21 @@
+<div class="doNotPrint">
+    <h2 mat-dialog-title> My Department</h2>
+</div>
+<hr>
+
+<mat-dialog-content>
+    <mat-grid-list cols="2" rowHeight="100px" gutterSize="15px">
+        <mat-grid-tile *ngFor="let card of cards">
+            <mat-card class="my-card">
+                <mat-card-title (click)="editDepartment(card.id)">
+                    <p class="text-center">
+                        {{card.departmentName}}
+                    </p>
+                </mat-card-title>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="close()" tabindex="1">Cancel</button>
+</mat-dialog-actions>

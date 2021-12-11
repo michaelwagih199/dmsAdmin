@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
-const USER_PERMISSION_KEY = 'auth-permission';
+const USER_RULES= 'user-roles';
 const USER_NAME_KEY = 'userName';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenStorageService {
+
 
   constructor() { }
 
@@ -21,6 +22,12 @@ export class TokenStorageService {
     window.sessionStorage.setItem(TOKEN_KEY, token);
   }
 
+  saveRoles(roles: any) {
+    
+    window.sessionStorage.removeItem(USER_RULES);
+    window.sessionStorage.setItem(USER_RULES, roles.name);
+  }
+
   public getToken(): any{
     return sessionStorage.getItem(TOKEN_KEY);
   }
@@ -29,7 +36,6 @@ export class TokenStorageService {
     window.sessionStorage.removeItem(USER_KEY);
     window.sessionStorage.setItem(USER_KEY, user);
     window.sessionStorage.setItem(USER_NAME_KEY, user);
-    // window.sessionStorage.setItem(USER_PERMISSION_KEY, JSON.stringify(user.permissions[0]));
   }
 
   public getUser(){

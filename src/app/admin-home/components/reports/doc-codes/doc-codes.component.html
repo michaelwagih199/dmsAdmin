@@ -1,1 +1,27 @@
-<p>doc-codes works!</p>
+<nz-card nzTitle="Departments " [nzExtra]="extraTemplate">
+    <nz-table #basicTable [nzData]="docsSets" [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let data of basicTable.data">
+                <td>{{ data.docCode }}</td>
+                <td>{{ data.docTitle}}</td>
+                <td>
+                    <button mat-icon-button color="primary" >
+                        <mat-icon>qr_code_scanner</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<ng-template #extraTemplate>
+    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Filter By Docment Type"
+        (ngModelChange)="onFilterTypeChange($event)" [(ngModel)]="departmentSelected">
+        <nz-option *ngFor="let item of departmentSet" [nzLabel]="item.departmentName" [nzValue]="item.id"></nz-option>
+    </nz-select>
+</ng-template>

@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ExcelService } from './shared/service/excel.service';
+import { NgxBarcodeModule } from 'ngx-barcode';
+import { QRCodeModule } from 'angular2-qrcode';
 
 registerLocaleData(en);
 
@@ -26,7 +28,9 @@ registerLocaleData(en);
     NgbModule,
     BrowserAnimationsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxBarcodeModule,
+    QRCodeModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US },authInterceptorProviders,ExcelService],
   bootstrap: [AppComponent]

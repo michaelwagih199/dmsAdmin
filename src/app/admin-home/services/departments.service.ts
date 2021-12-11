@@ -8,12 +8,17 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DepartmentsService {
  
+ 
   private baseUrl = `${environment.baseUrl}/departments`;
 
   constructor(private http: HttpClient) {}
 
   findAll(): Observable<any> {
     return this.http.get(`${this.baseUrl}`);
+  }
+
+  findMyDepartment(userName: any) : Observable<any>{
+    return this.http.get(`${this.baseUrl}/user/${userName}`);
   }
 
   findById(id: any) : Observable<any>{

@@ -7,13 +7,15 @@ import { SharedModule } from '../shared/shared.module';
 import { DepartmentComponent } from './components/department/department.component';
 import { ReportListComponent } from './components/reports/report-list/report-list.component';
 import { DocCodesComponent } from './components/reports/doc-codes/doc-codes.component';
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 @NgModule({
   declarations: [AdminHomeComponent, DepartmentComponent, ReportListComponent, DocCodesComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxBarcodeModule,
   ]
 })
 export class AdminHomeModule { }
