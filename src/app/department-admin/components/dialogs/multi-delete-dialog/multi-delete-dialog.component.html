@@ -1,1 +1,13 @@
-<p>multi-delete-dialog works!</p>
+<mat-card>
+    <mat-card-content>
+        <h2 class="example-h2">Delete Multible Docs</h2>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <section class="example-section" *ngFor="let item of docsSets">
+                <mat-checkbox class="example-margin" (change)="onChangeEventFunc(item.id,$event)">
+                    {{ item.docTitle}}
+                </mat-checkbox>
+            </section>
+            <button mat-raised-button color="warn">Submit</button>
+        </form>
+    </mat-card-content>
+</mat-card>

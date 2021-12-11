@@ -26,6 +26,7 @@ import { BarcodeComponent } from '../dialogs/barcode/barcode.component';
 import { DocsModel } from '../../models/docsModel';
 import { LogsService } from 'src/app/shared/service/logs.service';
 import { MultibleSearchComponent } from '../dialogs/multible-search/multible-search.component';
+import { MultiDeleteDialogComponent } from '../dialogs/multi-delete-dialog/multi-delete-dialog.component';
 
 /**
  * Food data with nested structure.
@@ -444,7 +445,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
             this.openSnackBar(`Folder Deleted Successfully`, '');
             this.getPatientId();
             this.dialog.closeAll();
-           
+
           },
           (error) => console.log(error)
         );
@@ -498,8 +499,18 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     });
   }
 
-  multiDelete(){
-    
+  multiDelete() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      docs: this.docsSets
+    };
+    this.dialog.open(MultiDeleteDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(MultiDeleteDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((data) => {
+
+      //delete all 
+
+    });
   }
 
   toHome() {
