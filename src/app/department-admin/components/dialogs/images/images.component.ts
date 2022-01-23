@@ -18,7 +18,7 @@ export class ImagesComponent implements OnInit {
   url: any;
   fileName: any;
   private baseUrl = `${environment.baseUrl}/files`;
-
+  pdfSrc = "localhost:8082/api/files/download/d03339dc-181d-45f7-bf4b-665a75e2c0ab.pdf";
   constructor(
     private service: FileServiceService,
     private sanitizer: DomSanitizer,
@@ -88,6 +88,22 @@ export class ImagesComponent implements OnInit {
       //window.location.href = response.url;
       fileSaver.saveAs(blob, this.fileName);
       this.isLoading = false;
+    }),
+      () => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
+  }
+
+  onPdfPreview() {
+    this.isLoading = true;
+    this.service.getfile(this.fileName).subscribe((response) => {
+      let blob: any = new Blob([response], {
+        type: 'text/json; charset=utf-8',
+      });
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+      window.location.href = response.url;
+      // fileSaver.saveAs(blob, this.fileName);
+      // this.isLoading = false;
     }),
       () => console.log('Error downloading the file'),
       () => console.info('File downloaded successfully');

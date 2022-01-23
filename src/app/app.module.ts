@@ -15,6 +15,7 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { ExcelService } from './shared/service/excel.service';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angular2-qrcode';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 registerLocaleData(en);
 
@@ -30,7 +31,9 @@ registerLocaleData(en);
     FormsModule,
     HttpClientModule,
     NgxBarcodeModule,
-    QRCodeModule
+    QRCodeModule,
+    PdfViewerModule
+
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US },authInterceptorProviders,ExcelService],
   bootstrap: [AppComponent]
