@@ -17,34 +17,23 @@ export class ImagesComponent implements OnInit {
   cycleId: any;
   url: any;
   fileName: any;
-  private baseUrl = `${environment.baseUrl}/files`;
-  pdfSrc = "localhost:8082/api/files/download/d03339dc-181d-45f7-bf4b-665a75e2c0ab.pdf";
+  isFilePdf: boolean = false;
+  private baseUrl = `${environment.baseUrl}/pdf/`;
+  pdfSrc;
   constructor(
     private service: FileServiceService,
-    private sanitizer: DomSanitizer,
     private dialogRef: MatDialogRef<ImagesComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data != null) {
-      this.fileName = data;
-      console.log(data);
+      this.fileName = data.fileName;
+      if (data.fileExtensionType == 'pdf') this.isFilePdf = true
+      this.pdfSrc = this.baseUrl.concat(this.fileName)
     } else {
     }
   }
 
-  ngOnInit(): void {
-    // this.isLoading = true;
-    // this.service.getImageByName(this.cycleId).subscribe(
-    //   (response) => {
-    //     this.isLoading = false;
-    //     this.fileName = response.fileName;
-    //     this.url = `${this.baseUrl}/download/${response.fileName}`
-    //     this.getImageFromService();
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // )
+  ngOnInit() {
   }
 
   getImageFromService() {
@@ -93,23 +82,8 @@ export class ImagesComponent implements OnInit {
       () => console.info('File downloaded successfully');
   }
 
-  onPdfPreview() {
-    this.isLoading = true;
-    this.service.getfile(this.fileName).subscribe((response) => {
-      let blob: any = new Blob([response], {
-        type: 'text/json; charset=utf-8',
-      });
-      const url = window.URL.createObjectURL(blob);
-      window.open(url);
-      window.location.href = response.url;
-      // fileSaver.saveAs(blob, this.fileName);
-      // this.isLoading = false;
-    }),
-      () => console.log('Error downloading the file'),
-      () => console.info('File downloaded successfully');
-  }
-
   close() {
     this.dialogRef.close();
   }
+
 }
