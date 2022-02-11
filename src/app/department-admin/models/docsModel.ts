@@ -14,6 +14,7 @@ export class DocsModel {
     departmentId!: string;
     isArchived!:   boolean;
     createdDate!:  string;
+    fileExtensionType!:string;
 }
 
 

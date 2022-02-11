@@ -12,6 +12,8 @@ import { NgZorroModule } from './components/ng-zorro/ng-zorro.module';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { QRCodeModule } from 'angular2-qrcode';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 @NgModule({
   declarations: [...fromComponents.components, ConfirmationDialog, AboutAppDialogComponent],
   imports: [
@@ -25,7 +27,8 @@ import { QRCodeModule } from 'angular2-qrcode';
     NgxPaginationModule,
     NgZorroModule,
     NgbCarouselModule,
-    QRCodeModule
+    QRCodeModule,
+    PdfViewerModule
    ],
   exports: [   
     CommonModule,
@@ -38,7 +41,8 @@ import { QRCodeModule } from 'angular2-qrcode';
     NgZorroModule,
     NgbCarouselModule,
     NgxBarcodeModule,
-    QRCodeModule
+    QRCodeModule,
+    PdfViewerModule
   ]
 })
 export class SharedModule { }

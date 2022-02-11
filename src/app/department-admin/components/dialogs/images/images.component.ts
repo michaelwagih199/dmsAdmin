@@ -16,35 +16,24 @@ export class ImagesComponent implements OnInit {
   isLoading: boolean = false;
   cycleId: any;
   url: any;
-  fileName: any;
-  private baseUrl = `${environment.baseUrl}/files`;
-
+  fileName!: string;
+  isFilePdf: boolean = false;
+  private baseUrl = `${environment.baseUrl}/pdf/`;
+  pdfSrc;
   constructor(
     private service: FileServiceService,
-    private sanitizer: DomSanitizer,
     private dialogRef: MatDialogRef<ImagesComponent>,
     @Inject(MAT_DIALOG_DATA) data: any
   ) {
     if (data != null) {
-      this.fileName = data;
-      console.log(data);
+      this.fileName = data.fileName;
+      if (this.fileName.includes('pdf')) this.isFilePdf = true
+      this.pdfSrc = this.baseUrl.concat(this.fileName)
     } else {
     }
   }
 
-  ngOnInit(): void {
-    // this.isLoading = true;
-    // this.service.getImageByName(this.cycleId).subscribe(
-    //   (response) => {
-    //     this.isLoading = false;
-    //     this.fileName = response.fileName;
-    //     this.url = `${this.baseUrl}/download/${response.fileName}`
-    //     this.getImageFromService();
-    //   },
-    //   (error) => {
-    //     console.log(error);
-    //   }
-    // )
+  ngOnInit() {
   }
 
   getImageFromService() {
@@ -96,4 +85,5 @@ export class ImagesComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
+
 }

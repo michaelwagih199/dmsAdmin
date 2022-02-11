@@ -17,6 +17,7 @@ interface ImagesModel {
 export class AdminHomeComponent implements OnInit {
   showNavigationArrows = false;
   showNavigationIndicators = false;
+  pdfSrc = "localhost:8082/api/files/download/d03339dc-181d-45f7-bf4b-665a75e2c0ab.pdf";
 
   constructor(private config: NgbCarouselConfig) {
     // customize default values of carousels used by this component tree
@@ -26,7 +27,9 @@ export class AdminHomeComponent implements OnInit {
     this.config.pauseOnHover = false;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+  }
   images: ImagesModel[] = [
     { src: 'assets/homeBg.png', header: 'Magic Line Petroleum Services & Agencies', discription: '' },
     // { src: 'assets/home.jpg', header: 'Do your Work Quietly', discription: '' },

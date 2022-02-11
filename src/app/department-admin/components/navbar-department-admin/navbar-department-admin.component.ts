@@ -278,7 +278,10 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     dialogConfig.autoFocus = true;
     console.log(item);
 
-    dialogConfig.data = item.fileName;
+    dialogConfig.data = {
+      fileName: item.fileName,
+      fileExtensionType: item.fileExtensionType
+    };
     this.dialog.open(ImagesComponent, dialogConfig);
     const dialogRef = this.dialog.open(ImagesComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => { });
