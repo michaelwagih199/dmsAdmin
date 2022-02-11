@@ -16,7 +16,7 @@ export class ImagesComponent implements OnInit {
   isLoading: boolean = false;
   cycleId: any;
   url: any;
-  fileName: any;
+  fileName!: string;
   isFilePdf: boolean = false;
   private baseUrl = `${environment.baseUrl}/pdf/`;
   pdfSrc;
@@ -27,7 +27,7 @@ export class ImagesComponent implements OnInit {
   ) {
     if (data != null) {
       this.fileName = data.fileName;
-      if (data.fileExtensionType == 'pdf') this.isFilePdf = true
+      if (this.fileName.includes('pdf')) this.isFilePdf = true
       this.pdfSrc = this.baseUrl.concat(this.fileName)
     } else {
     }
