@@ -28,7 +28,7 @@
 					<mat-icon color="primary">person</mat-icon> My Folders
 				</a>
 
-				<a mat-list-item [routerLink]="'/setting/docPlaces'"
+				<a *ngIf="DynamicNavBar.setting" mat-list-item [routerLink]="'/setting/docPlaces'"
 					(click)="addTitle('Places Codes')">
 					<mat-icon color="primary">auto_graph</mat-icon>Places Codes
 				</a>

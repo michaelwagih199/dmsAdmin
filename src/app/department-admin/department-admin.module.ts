@@ -16,6 +16,7 @@ import { BarcodeComponent } from './components/dialogs/barcode/barcode.component
 import { MyFolderComponent } from './components/dialogs/my-folder/my-folder.component';
 import { MultibleSearchComponent } from './components/dialogs/multible-search/multible-search.component';
 import { MultiDeleteDialogComponent } from './components/dialogs/multi-delete-dialog/multi-delete-dialog.component';
+import { AddDocPlaceComponent } from './components/dialogs/add-doc-place/add-doc-place.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { MultiDeleteDialogComponent } from './components/dialogs/multi-delete-di
     BarcodeComponent,
     MyFolderComponent,
     MultiDeleteDialogComponent,
+    AddDocPlaceComponent,
   ],
   imports: [
     CommonModule,

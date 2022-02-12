@@ -17,6 +17,10 @@ export class DocPlacesService {
     return this.http.get(`${this.baseUrl}`);
   }
 
+  findByDepartmentId(departmentId: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${departmentId}`);
+  }
+
   create(object: any,departmentId: any): Observable<any> {
     return this.http.post(`${this.baseUrl}?departmentId=${departmentId}`, object);
   }

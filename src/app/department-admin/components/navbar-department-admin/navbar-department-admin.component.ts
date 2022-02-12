@@ -27,6 +27,7 @@ import { DocsModel } from '../../models/docsModel';
 import { LogsService } from 'src/app/shared/service/logs.service';
 import { MultibleSearchComponent } from '../dialogs/multible-search/multible-search.component';
 import { MultiDeleteDialogComponent } from '../dialogs/multi-delete-dialog/multi-delete-dialog.component';
+import { AddDocPlaceComponent } from '../dialogs/add-doc-place/add-doc-place.component';
 
 /**
  * Food data with nested structure.
@@ -83,13 +84,13 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   hasChild = (_: number, node: FolderStructure) =>
     !!node.children && node.children.length > 0;
   ngOnInit(): void {
-    this.getPatientId();
+    this.getId();
     this.userName = sessionStorage.getItem('userName')?.toString();
     this.getAllDocTypeById();
   }
 
   /**data */
-  getPatientId() {
+  getId() {
     this.routeSub = this.route.params.subscribe((params) => {
       this.departmentId = params['id'];
       this.findDepartmentById(params['id']);
@@ -149,6 +150,20 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     };
     this.dialog.open(DocTypeComponent, dialogConfig);
     const dialogRef = this.dialog.open(DocTypeComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe((data) => {
+      this.getAllDocTypeById();
+    });
+  }
+
+  //todo 
+  addDocPlace(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      departmentId: this.department.id,
+      departmnetName:this.department.departmentName
+    };
+    this.dialog.open(AddDocPlaceComponent, dialogConfig);
+    const dialogRef = this.dialog.open(AddDocPlaceComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => {
       this.getAllDocTypeById();
     });
@@ -261,7 +276,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
       this.folderService.create(data.name, this.parentId).subscribe(
         (data) => {
           this.isLoading = false;
-          this.getPatientId();
+          this.getId();
           this.dialog.closeAll();
         },
         (err) => {
@@ -446,7 +461,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
           (data) => {
             this.logsEvent(`DeleteFolder : ${element.name}`);
             this.openSnackBar(`Folder Deleted Successfully`, '');
-            this.getPatientId();
+            this.getId();
             this.dialog.closeAll();
 
           },

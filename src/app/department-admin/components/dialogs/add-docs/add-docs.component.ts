@@ -52,7 +52,6 @@ export class AddDocsComponent implements OnInit {
     private dialogRef: MatDialogRef<AddDocsComponent>,
     private notification: NzNotificationService,
     private docTypeService: DocTypeService,
-    private docsService: DocsService,
     private docPlacesService: DocPlacesService,
     private http: HttpClient,
     private msg: NzMessageService,
@@ -81,7 +80,7 @@ export class AddDocsComponent implements OnInit {
   /**data */
   getAllDOcPlaces() {
     this.isLoading = true;
-    this.docPlacesService.findAll().subscribe(
+    this.docPlacesService.findByDepartmentId(this.departmentId).subscribe(
       (data) => {
         this.docsPlaces = data;
         this.isLoading = false;
