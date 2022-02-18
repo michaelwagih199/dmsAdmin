@@ -262,6 +262,8 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   createFolder() {
+    console.log(this.parentId);
+    
     let folderName: any;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -273,7 +275,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     const dialogRef = this.dialog.open(AddFolderComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => {
       this.isLoading = true;
-      this.folderService.create(data.name, this.parentId).subscribe(
+      this.folderService.create(data.name, this.getFolderSelected()).subscribe(
         (data) => {
           this.isLoading = false;
           this.getId();
@@ -305,7 +307,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   onFilterTypeChange(value: string) {
     if (value == null)
       this.getParentDocs(
-        this.breadcrumbList[this.breadcrumbList.length - 1].id
+        this.getFolderSelected()
       );
     else if (value != null) this.filterType(value);
   }
@@ -319,7 +321,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
       this.docsService
         .filterByType(
           value,
-          this.breadcrumbList[this.breadcrumbList.length - 1].id
+          this.getFolderSelected()
         )
         .subscribe(
           (data) => {
@@ -463,7 +465,6 @@ export class NavbarDepartmentAdminComponent implements OnInit {
             this.openSnackBar(`Folder Deleted Successfully`, '');
             this.getId();
             this.dialog.closeAll();
-
           },
           (error) => console.log(error)
         );
@@ -546,6 +547,9 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     });
   }
 
+getFolderSelected():string{
+  return this.breadcrumbList[this.breadcrumbList.length - 1].id
+}
   createNotification(type: string, title: string, description: any): void {
     this.notification.create(type, title, description);
   }
