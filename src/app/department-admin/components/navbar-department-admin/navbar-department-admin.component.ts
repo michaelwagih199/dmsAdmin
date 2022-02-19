@@ -28,6 +28,8 @@ import { LogsService } from 'src/app/shared/service/logs.service';
 import { MultibleSearchComponent } from '../dialogs/multible-search/multible-search.component';
 import { MultiDeleteDialogComponent } from '../dialogs/multi-delete-dialog/multi-delete-dialog.component';
 import { AddDocPlaceComponent } from '../dialogs/add-doc-place/add-doc-place.component';
+import { AppConstants } from '../../../_helpers/app-constants';
+import { SubFolderService } from '../../services/sub-folder.service';
 
 /**
  * Food data with nested structure.
@@ -38,6 +40,11 @@ interface FolderStructure {
   id: string;
   name: any;
   children?: FolderStructure[];
+}
+
+interface SubFolder{
+  folderName:any;
+  parentId:any;
 }
 
 let TREE_DATA: FolderStructure[] = [];
@@ -63,7 +70,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   searchValue: any;
   docmentTypeSet!: DocTypeModel[];
   docmentTypeSelected: any;
-  nodeId!: string;
+  node!: FolderStructure;
 
   constructor(
     private router: Router,
@@ -76,7 +83,9 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     private docTypeService: DocTypeService,
     private docsService: DocsService,
     private notification: NzNotificationService,
-    private logs_service: LogsService
+    private logs_service: LogsService,
+    private subFolderService: SubFolderService,
+    
   ) {
     this.dataSource.data = TREE_DATA;
   }
@@ -223,7 +232,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
         this.getAllDocTypeById();
         this.docsSets = [];
         this.dialog.closeAll();
-        this.getParentDocs(this.nodeId);
+        this.getParentDocs(this.node.id);
       });
     } else {
       this.createNotification(
@@ -244,7 +253,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     this.clearBreadcrumbList();
     this.breadcrumbList.push(node);
     this.getParentDocs(node.id);
-    this.nodeId = node.id;
+    this.node = node;
   }
 
   getParentDocs(id: string) {
@@ -262,7 +271,6 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   createFolder() {
-    console.log(this.parentId);
     
     let folderName: any;
     const dialogConfig = new MatDialogConfig();
@@ -287,6 +295,47 @@ export class NavbarDepartmentAdminComponent implements OnInit {
         }
       );
     });
+  }
+
+  addSupFolderFolder(){
+    if (!this.node || this.node.name == 'ParentFolder') {
+      this.openSnackBar(AppConstants.notificationMessage.SELECT_PARNT,'')
+    }else{
+      let folderName: any;
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = {
+        folderName: folderName,
+      };
+      this.dialog.open(AddFolderComponent, dialogConfig);
+      const dialogRef = this.dialog.open(AddFolderComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe((data) => {
+        this.isLoading = true;
+        let subfolderobject:SubFolder = {
+          folderName:data.name,
+          parentId:this.node.id
+        }
+        this.subFolderService.create(subfolderobject).subscribe(
+          () => {
+            this.isLoading = false;
+            this.getId();
+            this.dialog.closeAll();
+            this.getAllSubfolders();
+            this.openSnackBar(AppConstants.notificationMessage.SAVED_SUCCESSFULLY,'')
+          },
+          (err) => {
+            this.isLoading = false;
+            console.log(err);
+          }
+        );
+      });  
+    }
+    
+  }
+  
+  getAllSubfolders() {
+    throw new Error('Method not implemented.');
   }
 
   viewImage(item: DocsModel) {
@@ -506,7 +555,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
             this.openSnackBar(`Docment Deleted Successfully`, '');
             this.docsSets = [];
             this.dialog.closeAll();
-            this.getParentDocs(this.nodeId);
+            this.getParentDocs(this.node.id);
             this.logsEvent(`Delete Docment : ${item.docTitle}`);
           },
           (error) => console.log(error)
