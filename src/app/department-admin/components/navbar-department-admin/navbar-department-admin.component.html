@@ -121,11 +121,39 @@
     <div class="col-10">
 
       <nz-collapse>
-        <nz-collapse-panel nzHeader="Sup Folders" nzActive="true"  [nzExtra]="extraTpl">
+        <nz-collapse-panel nzHeader="Sup Folders" nzActive="false" [nzExtra]="extraTpl">
 
+          <!-- subFolders grids -->
+          <div class="scrollable-15 mt-1 ">
+           
+              <mat-grid-list cols="18" gutterSize="10px" rowHeight="50px">
+                <mat-grid-tile *ngFor="let card of subFoldersList">
+                  <mat-card class="my-card" (click)="subFoldernodeClick(card)">
+                    <mat-icon aria-hidden="false" class="icon">folder</mat-icon>
+                   <p>{{card?.folderName}}</p>
+                  </mat-card>
+                </mat-grid-tile>
+              </mat-grid-list>
+           
+          </div>
+          <div class="devInfo">
+            <mat-card class="my-card">
+              <mat-icon aria-hidden="false" class="icon">folder_open</mat-icon>
+             <p>{{selectedSubFolder?.folderName}}</p>
+            </mat-card>
+            <mat-card class="my-card" (click)="deleteSubFolder()">
+              <mat-icon aria-hidden="false" class="icon">delete</mat-icon>
+              <p>Delete</p>
+            </mat-card>
+            <mat-card class="my-card" (click)="uploadDocToSubFolder()">
+              <mat-icon aria-hidden="false" class="icon">file_upload</mat-icon>
+              <p>Upload</p>
+            </mat-card>
+          </div>
         </nz-collapse-panel>
-        <nz-collapse-panel nzHeader="Docments" nzActive="true">
-          <nz-card nzTitle ="Docments" style="width: 100%;">
+
+        <nz-collapse-panel nzHeader="Documents" nzActive="true">
+          <nz-card nzTitle="Docments" style="width: 100%;">
             <nz-table #basicTable [nzData]="docsSets" style="width: 100%;">
               <thead>
                 <tr>
@@ -187,7 +215,9 @@
 
   <ng-template #extraTpl>
     <!-- add Sup Folder -->
-    <i nz-icon nzType="folder-add" (click)="addSupFolderFolder()"></i>
+    <button mat-mini-fab color="accent" matTooltip="Create Sub Directory">
+      <mat-icon (click)="addSupFolderFolder()">create_new_folder</mat-icon>
+    </button>
   </ng-template>
 
 </div>

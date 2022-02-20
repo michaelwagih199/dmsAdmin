@@ -21,4 +21,8 @@ export class SubFolderService {
     return this.http.post(`${this.baseUrl}`, object);
   }
 
+  delete(id: string) : Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
 }

@@ -16,7 +16,6 @@ import { DocTypeComponent } from '../dialogs/doc-type/doc-type.component';
 import { DocTypeModel } from '../../models/docTypeModel';
 import { DocTypeService } from '../../services/doc-type.service';
 import { AddDocsComponent } from '../dialogs/add-docs/add-docs.component';
-import { DocDtoModel } from '../../models/docsDto';
 import { DocsService } from '../../services/docs.service';
 import { MoveDocComponent } from '../dialogs/move-doc/move-doc.component';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -42,9 +41,10 @@ interface FolderStructure {
   children?: FolderStructure[];
 }
 
-interface SubFolder{
-  folderName:any;
-  parentId:any;
+interface SubFolder {
+  id: any
+  folderName: any;
+  parentId: any;
 }
 
 let TREE_DATA: FolderStructure[] = [];
@@ -65,12 +65,16 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   // docsSets: DocsModel[] =[];
   public docsSets: Array<DocsModel> = [];
 
+  subFoldersList!: Array<SubFolder>;
+  selectedSubFolder!: SubFolder;
+
   department: DeparmentModel = new DeparmentModel();
   parentId: any;
   searchValue: any;
   docmentTypeSet!: DocTypeModel[];
   docmentTypeSelected: any;
   node!: FolderStructure;
+
 
   constructor(
     private router: Router,
@@ -85,7 +89,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     private notification: NzNotificationService,
     private logs_service: LogsService,
     private subFolderService: SubFolderService,
-    
+
   ) {
     this.dataSource.data = TREE_DATA;
   }
@@ -165,11 +169,11 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   //todo 
-  addDocPlace(){
+  addDocPlace() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       departmentId: this.department.id,
-      departmnetName:this.department.departmentName
+      departmnetName: this.department.departmentName
     };
     this.dialog.open(AddDocPlaceComponent, dialogConfig);
     const dialogRef = this.dialog.open(AddDocPlaceComponent, dialogConfig);
@@ -219,15 +223,17 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   uploadFile() {
-    console.log(this.parentId);
-    if (this.breadcrumbList.length != 0) {
-      const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {
-        departmentId: this.department.id,
-        breadcrumbList: this.breadcrumbList,
-      };
-      this.dialog.open(AddDocsComponent, dialogConfig);
-      const dialogRef = this.dialog.open(AddDocsComponent, dialogConfig);
+
+    
+    if (this.breadcrumbList) {
+      const dialogRef = this.dialog.open(AddDocsComponent, {
+        width: '60%',
+        data: {
+          departmentId: this.department.id,
+          parentId: this.getFolderSelectedId(),
+          parentName: this.getFolderSelectedName()
+        }
+      });
       dialogRef.afterClosed().subscribe((data) => {
         this.getAllDocTypeById();
         this.docsSets = [];
@@ -243,6 +249,33 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     }
   }
 
+  uploadDocToSubFolder() {
+    if (this.breadcrumbList) {
+      const dialogRef = this.dialog.open(AddDocsComponent, {
+        width: '60%',
+        data: {
+          departmentId: this.department.id,
+          parentId: this.selectedSubFolder.id,
+          parentName: this.selectedSubFolder.folderName
+        }
+      });
+      dialogRef.afterClosed().subscribe((data) => {
+        this.getAllDocTypeById();
+        this.docsSets = [];
+        this.dialog.closeAll();
+        this.getParentDocs(this.node.id);
+      });
+    } else {
+      this.createNotification(
+        'error',
+        'Take care',
+        'Please Select Folder To Upload'
+      );
+    }
+  }
+
+
+
   redirectTo(uri: string) {
     this.router
       .navigateByUrl('/', { skipLocationChange: true })
@@ -254,6 +287,54 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     this.breadcrumbList.push(node);
     this.getParentDocs(node.id);
     this.node = node;
+
+    this.selectedSubFolder = {
+      "folderName": null,
+      "id": null,
+      "parentId": null
+    }
+
+    if (node.name != AppConstants.folderType.parentFolder) {
+      this.getSubfolders()
+    }
+  }
+
+  subFoldernodeClick(card: SubFolder) {
+    this.selectedSubFolder = card
+    this.getParentDocs(card.id);
+  }
+
+  deleteSubFolder() {
+    if (!this.selectedSubFolder.id) {
+
+    } else {
+      const dialogRef = this.dialog.open(ConfirmationDialog, {
+        data: {
+          message: `Are You Shoure To Delete? ${this.selectedSubFolder.folderName}`,
+          buttonText: {
+            ok: `Delete`,
+            cancel: `Cancel`,
+          },
+        },
+      });
+      dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.isLoading = true
+          this.subFolderService.delete(this.selectedSubFolder.id).subscribe(date => {
+            this.isLoading = false
+            this.openSnackBar(AppConstants.notificationMessage.DELETE_SUCCESSFULLY, '')
+            this.getSubfolders();
+            this.selectedSubFolder.id = null;
+            this.selectedSubFolder.folderName = null;
+          });
+          const a = document.createElement('a');
+          a.click();
+          a.remove();
+        }
+      });
+    }
+
+
   }
 
   getParentDocs(id: string) {
@@ -271,7 +352,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   createFolder() {
-    
+
     let folderName: any;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -283,7 +364,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     const dialogRef = this.dialog.open(AddFolderComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => {
       this.isLoading = true;
-      this.folderService.create(data.name, this.getFolderSelected()).subscribe(
+      this.folderService.create(data.name, this.parentId).subscribe(
         (data) => {
           this.isLoading = false;
           this.getId();
@@ -297,10 +378,10 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     });
   }
 
-  addSupFolderFolder(){
+  addSupFolderFolder() {
     if (!this.node || this.node.name == 'ParentFolder') {
-      this.openSnackBar(AppConstants.notificationMessage.SELECT_PARNT,'')
-    }else{
+      this.openSnackBar(AppConstants.notificationMessage.SELECT_PARNT, '')
+    } else {
       let folderName: any;
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
@@ -312,30 +393,35 @@ export class NavbarDepartmentAdminComponent implements OnInit {
       const dialogRef = this.dialog.open(AddFolderComponent, dialogConfig);
       dialogRef.afterClosed().subscribe((data) => {
         this.isLoading = true;
-        let subfolderobject:SubFolder = {
-          folderName:data.name,
-          parentId:this.node.id
+        let subfolderobject: SubFolder = {
+          id: null,
+          folderName: data.name,
+          parentId: this.node.id
         }
         this.subFolderService.create(subfolderobject).subscribe(
           () => {
             this.isLoading = false;
             this.getId();
             this.dialog.closeAll();
-            this.getAllSubfolders();
-            this.openSnackBar(AppConstants.notificationMessage.SAVED_SUCCESSFULLY,'')
+            this.getSubfolders();
+            this.openSnackBar(AppConstants.notificationMessage.SAVED_SUCCESSFULLY, '')
           },
           (err) => {
             this.isLoading = false;
             console.log(err);
           }
         );
-      });  
+      });
     }
-    
+
   }
-  
-  getAllSubfolders() {
-    throw new Error('Method not implemented.');
+
+  getSubfolders() {
+    this.isLoading = true
+    this.subFolderService.findByParentId(this.node.id).subscribe(response => {
+      this.isLoading = false;
+      this.subFoldersList = response
+    }, err => console.log(err));
   }
 
   viewImage(item: DocsModel) {
@@ -356,7 +442,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   onFilterTypeChange(value: string) {
     if (value == null)
       this.getParentDocs(
-        this.getFolderSelected()
+        this.getFolderSelectedId()
       );
     else if (value != null) this.filterType(value);
   }
@@ -370,7 +456,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
       this.docsService
         .filterByType(
           value,
-          this.getFolderSelected()
+          this.getFolderSelectedId()
         )
         .subscribe(
           (data) => {
@@ -528,9 +614,11 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       departmentId: this.department.id,
-      breadcrumbList: this.breadcrumbList,
+      parentId: this.getFolderSelectedId(),
+      parentName: this.getFolderSelectedName(),
       model: item,
     };
+
     this.dialog.open(AddDocsComponent, dialogConfig);
     const dialogRef = this.dialog.open(AddDocsComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => {
@@ -551,7 +639,7 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.docsService.delete(item.id).subscribe(
-          (data) => {
+          () => {
             this.openSnackBar(`Docment Deleted Successfully`, '');
             this.docsSets = [];
             this.dialog.closeAll();
@@ -596,9 +684,14 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     });
   }
 
-getFolderSelected():string{
-  return this.breadcrumbList[this.breadcrumbList.length - 1].id
-}
+  getFolderSelectedId(): string {
+    return this.breadcrumbList[this.breadcrumbList.length - 1].id
+  }
+
+  getFolderSelectedName(): string {
+    return this.breadcrumbList[this.breadcrumbList.length - 1].name
+  }
+
   createNotification(type: string, title: string, description: any): void {
     this.notification.create(type, title, description);
   }

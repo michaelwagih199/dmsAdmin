@@ -1,8 +1,9 @@
-$color_white: #fff;
+$color_white: #fafafa;
 $color_prime: #1686ca;
 $color_grey: #e2e2e2;
 $color_grey_dark: #a2a2a2;
 $color_blue_gray: #b0ddd8;
+$font-elmassiri: "El Messiri";
 
 .logo {
   width: max-content;
@@ -72,6 +73,49 @@ nz-breadcrumb {
   margin-top: 0;
   margin-bottom: 0;
   list-style-type: none;
+}
+
+mat-grid-tile {
+  background: $color_grey;
+  border-radius: 3px;
+}
+
+.scrollable-20 {
+  overflow-y: scroll;
+  height: 20vh;
+}
+.scrollable-15 {
+  overflow-y: scroll;
+  height: 15vh;
+}
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+.devInfo {
+  display: flex;
+  width: 20%;
+  margin: auto;
+  gap: 20px;
+  flex-direction: row;
+  justify-items: baseline;
+  justify-content: space-around;
+  border-radius: 25px;
+}
+
+.my-card {
+  background: $color_white;
+  width: 100%;
+  color: $color_grey_dark;
+  font-family: $font-elmassiri;
+  text-align: center;
+  font-size: 12px;
+  padding: 2px;
+  cursor: pointer;
+  .icon {
+    color: $color_prime;
+  }
 }
 
 /*
