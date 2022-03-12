@@ -17,6 +17,10 @@ export class SubFolderService {
     return this.http.get(`${this.baseUrl}/parent/${parentId}`);
   }
 
+  findByDepartmentId(departmentId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/department/${departmentId}`);
+  }
+
   create(object: any): Observable<any> {
     return this.http.post(`${this.baseUrl}`, object);
   }

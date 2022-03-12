@@ -11,7 +11,6 @@ import { AddFolderComponent } from '../dialogs/add-folder/add-folder.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialog } from 'src/app/shared/components/layout/dialog/confirmation/confirmation.component';
-import { FormControl } from '@angular/forms';
 import { DocTypeComponent } from '../dialogs/doc-type/doc-type.component';
 import { DocTypeModel } from '../../models/docTypeModel';
 import { DocTypeService } from '../../services/doc-type.service';
@@ -29,6 +28,7 @@ import { MultiDeleteDialogComponent } from '../dialogs/multi-delete-dialog/multi
 import { AddDocPlaceComponent } from '../dialogs/add-doc-place/add-doc-place.component';
 import { AppConstants } from '../../../_helpers/app-constants';
 import { SubFolderService } from '../../services/sub-folder.service';
+import { SubFolder } from '../../models/sub-folder';
 
 /**
  * Food data with nested structure.
@@ -39,12 +39,6 @@ interface FolderStructure {
   id: string;
   name: any;
   children?: FolderStructure[];
-}
-
-interface SubFolder {
-  id: any
-  folderName: any;
-  parentId: any;
 }
 
 let TREE_DATA: FolderStructure[] = [];
@@ -193,13 +187,16 @@ export class NavbarDepartmentAdminComponent implements OnInit {
   }
 
   moveDoc(item: DocsModel) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      docId: item.id,
-      departmentId: this.department.id,
-    };
-    this.dialog.open(MoveDocComponent, dialogConfig);
-    const dialogRef = this.dialog.open(MoveDocComponent, dialogConfig);
+
+    let dialogRef = this.dialog.open(MoveDocComponent, {
+      width: '50%',
+      data :{
+        docId: item.id,
+        departmentId: this.department.id,
+      }
+    });
+
+    // this.dialog.open(MoveDocComponent, dialogConfig);
     dialogRef.afterClosed().subscribe((data) => {
       this.isLoading = true;
       this.docsService.moveDocComponent(data.parentId, item.id).subscribe(
@@ -291,7 +288,8 @@ export class NavbarDepartmentAdminComponent implements OnInit {
     this.selectedSubFolder = {
       "folderName": null,
       "id": null,
-      "parentId": null
+      "parentId": null,
+      "departmentId": null
     }
 
     if (node.name != AppConstants.folderType.parentFolder) {
@@ -396,7 +394,8 @@ export class NavbarDepartmentAdminComponent implements OnInit {
         let subfolderobject: SubFolder = {
           id: null,
           folderName: data.name,
-          parentId: this.node.id
+          parentId: this.node.id,
+          departmentId :this.departmentId
         }
         this.subFolderService.create(subfolderobject).subscribe(
           () => {
