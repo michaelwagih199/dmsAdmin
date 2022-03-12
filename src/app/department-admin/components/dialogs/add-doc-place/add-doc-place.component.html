@@ -1,0 +1,56 @@
+<div class="c-dialgo">
+    <div class="container">
+        <div class="row justify-content-lg-between">
+            <div class="col">
+                <h2>{{departmnetName}}</h2>
+            </div>
+            <div class="col">
+                <button mat-icon-button color="primary" (click)="close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <mat-dialog-content>
+        
+        <mat-progress-bar color="accent" mode="indeterminate" *ngIf="isLoading" value="20"></mat-progress-bar>
+    
+        <form nz-form [formGroup]="validateForm">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field>
+                            <input matInput required placeholder="Place Code" formControlName="name"
+                                [(ngModel)]="description" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="col mt-2">
+                        <button mat-raised-button color="accent" (click)="save()" [disabled]="!validateForm.valid"> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <nz-card nzTitle="Docments">
+    
+            <nz-table #basicTable [nzData]="dataSet" [nzLoading]="isLoading">
+                <thead>
+                    <tr>
+                        <th>Place Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of basicTable.data">
+                        <td>{{item.codePlace}}</td>
+                        <td>
+                            <a class="btn text-danger" (click)="onDelete(item)">
+                                <i nz-icon nzType="delete" nzTheme="outline"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </mat-dialog-content>
+</div>

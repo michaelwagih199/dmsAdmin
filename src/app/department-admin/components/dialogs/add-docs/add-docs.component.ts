@@ -16,11 +16,13 @@ import { LogsService } from 'src/app/shared/service/logs.service';
 import { environment } from 'src/environments/environment';
 import { DocsModel } from '../../../models/docsModel';
 
-interface FolderStructure {
-  id: string;
-  name: any;
-  children?: FolderStructure[];
+export class ObjectData {
+  departmentId!: string
+  parentId!: string
+  parentName!: string
+  model!:DocsModel
 }
+
 
 @Component({
   selector: 'app-add-docs',
@@ -28,14 +30,14 @@ interface FolderStructure {
   styleUrls: ['./add-docs.component.scss'],
 })
 export class AddDocsComponent implements OnInit {
-  breadcrumbList: FolderStructure[] = [];
-  departmentId: any;
-  docs: DocsModel = new DocsModel();
+  objecData!:ObjectData;
   validateForm!: FormGroup;
   docsPlaces!: CodePlacesModel[];
   docTypeList!: DocTypeModel[];
   isLoading: boolean = false;
   isUpdate: boolean = false;
+  docs: DocsModel = new DocsModel();
+
   imagesType: string = `application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint,
   text/plain, application/pdf, image/*`;
   /**upload file */
@@ -52,24 +54,22 @@ export class AddDocsComponent implements OnInit {
     private dialogRef: MatDialogRef<AddDocsComponent>,
     private notification: NzNotificationService,
     private docTypeService: DocTypeService,
-    private docsService: DocsService,
     private docPlacesService: DocPlacesService,
     private http: HttpClient,
     private msg: NzMessageService,
     private _snackBar: MatSnackBar,
     private logs_service: LogsService,
-    @Inject(MAT_DIALOG_DATA) data: any
+    @Inject(MAT_DIALOG_DATA) data: ObjectData
   ) {
+    this.objecData =data
     if (data.model) {
-      this.docs = data.model;
       this.isUpdate = true;
+      this.docs = data.model;
     } else {
       this.isUpdate = false;
       this.docs = new DocsModel();
-    }
 
-    this.departmentId = data.departmentId;
-    this.breadcrumbList = data.breadcrumbList;
+    }
   }
 
   ngOnInit(): void {
@@ -81,7 +81,7 @@ export class AddDocsComponent implements OnInit {
   /**data */
   getAllDOcPlaces() {
     this.isLoading = true;
-    this.docPlacesService.findAll().subscribe(
+    this.docPlacesService.findByDepartmentId(this.objecData.departmentId).subscribe(
       (data) => {
         this.docsPlaces = data;
         this.isLoading = false;
@@ -95,7 +95,7 @@ export class AddDocsComponent implements OnInit {
 
   getAllDocTypeById() {
     this.isLoading = true;
-    this.docTypeService.findByDepartment(this.departmentId).subscribe(
+    this.docTypeService.findByDepartment(this.objecData.departmentId).subscribe(
       (data) => {
         this.docTypeList = data;
         this.isLoading = false;
@@ -127,18 +127,15 @@ export class AddDocsComponent implements OnInit {
     if (this.isUpdate) {
       this.isLoading = true;
       const formData = new FormData();
-      this.docs.departmentId = this.departmentId;
-      this.docs.parentId =
-        this.breadcrumbList[this.breadcrumbList.length - 1].id;
 
       let nDocs = {
         docCode: this.docs.docCode,
         docTitle: this.docs.docTitle,
         docOwner: this.docs.docOwner,
-        parentId: this.docs.parentId,
+        parentId: this.objecData.parentId,
         docsPlaces: this.docs.docsPlaces,
         docsType: this.docs.docsType,
-        departmentId: this.docs.departmentId,
+        departmentId: this.objecData.departmentId,
         comment: this.docs.comment,
         fileName: this.docs.fileName,
       };
@@ -177,9 +174,8 @@ export class AddDocsComponent implements OnInit {
       this.isLoading = true;
       const formData = new FormData();
 
-      this.docs.departmentId = this.departmentId;
-      this.docs.parentId =
-        this.breadcrumbList[this.breadcrumbList.length - 1].id;
+      this.docs.departmentId = this.objecData.departmentId;
+      this.docs.parentId = this.objecData.parentId;
 
       formData.append('docs', JSON.stringify(this.docs));
       // tslint:disable-next-line:no-any

@@ -39,11 +39,11 @@
         </button>
       </div>
 
-      <div>
+      <!-- <div>
         <button mat-mini-fab color="warn" matTooltip="Delete Multiple Docs">
           <mat-icon (click)="multiDelete()">delete</mat-icon>
         </button>
-      </div>
+      </div> -->
 
       <div>
         <button mat-mini-fab color="primary" matTooltip="Create New Directory">
@@ -76,10 +76,10 @@
             </button>
           </div>
 
-          <!-- <li nz-menu-item>
-                  <i nz-icon nzType="heart"></i>
-                  <span class="text-primary">Favorite Docs</span>
-                </li> -->
+          <li nz-menu-item (click)="addDocPlace()">
+            <i nz-icon nzType="pushpin"></i>
+            <span class="text-primary">Docs Places</span>
+          </li>
 
           <li nz-menu-item (click)="addDocType()">
             <i nz-icon nzType="setting"></i>
@@ -119,62 +119,105 @@
       </nz-sider>
     </div>
     <div class="col-10">
-      <nz-card nzTitle="Docments" style="width: 100%;">
-        <nz-table #basicTable [nzData]="docsSets" style="width: 100%;">
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Title</th>
-              <th>Owner</th>
-              <th>Doc Date</th>
-              <th>Place Code</th>
-              <th>Type</th>
-              <th>Comment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let data of basicTable.data">
-              <td>{{ data.docCode }}</td>
-              <td>{{ data.docTitle}}</td>
-              <td>{{ data.docOwner}}</td>
-              <td>{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
-              <td>{{ data.docsPlaces?.codePlace}}</td>
-              <td>{{ data.docsType?.type}}</td>
-              <td>{{ data.comment}}</td>
-              <td>
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="viewImage(data)">
-                    <mat-icon>image</mat-icon>
-                    <span>View </span>
-                  </button>
-                  <button mat-menu-item (click)="editeDocs(data)">
-                    <mat-icon>edit</mat-icon>
-                    <span>Edit </span>
-                  </button>
-                  <button mat-menu-item (click)="deleteDoc(data)">
-                    <mat-icon>delete</mat-icon>
-                    <span>Delete </span>
-                  </button>
-                  <button mat-menu-item (click)="moveDoc(data)">
-                    <mat-icon>published_with_changes</mat-icon>
-                    <span>Move</span>
-                  </button>
 
-                  <button mat-menu-item (click)="onBarcode(data)">
-                    <mat-icon>qr_code_scanner</mat-icon>
-                    <span>QrCode</span>
-                  </button>
+      <nz-collapse>
+        <nz-collapse-panel nzHeader="Sup Folders" nzActive="false" [nzExtra]="extraTpl">
 
-                </mat-menu>
-              </td>
-            </tr>
-          </tbody>
-        </nz-table>
-      </nz-card>
+          <!-- subFolders grids -->
+          <div class="scrollable-15 mt-1 ">
+           
+              <mat-grid-list cols="18" gutterSize="10px" rowHeight="50px">
+                <mat-grid-tile *ngFor="let card of subFoldersList">
+                  <mat-card class="my-card" (click)="subFoldernodeClick(card)">
+                    <mat-icon aria-hidden="false" class="icon">folder</mat-icon>
+                   <p>{{card?.folderName}}</p>
+                  </mat-card>
+                </mat-grid-tile>
+              </mat-grid-list>
+           
+          </div>
+          <div class="devInfo">
+            <mat-card class="my-card">
+              <mat-icon aria-hidden="false" class="icon">folder_open</mat-icon>
+             <p>{{selectedSubFolder?.folderName}}</p>
+            </mat-card>
+            <mat-card class="my-card" (click)="deleteSubFolder()">
+              <mat-icon aria-hidden="false" class="icon">delete</mat-icon>
+              <p>Delete</p>
+            </mat-card>
+            <mat-card class="my-card" (click)="uploadDocToSubFolder()">
+              <mat-icon aria-hidden="false" class="icon">file_upload</mat-icon>
+              <p>Upload</p>
+            </mat-card>
+          </div>
+        </nz-collapse-panel>
 
+        <nz-collapse-panel nzHeader="Documents" nzActive="true">
+          <nz-card nzTitle="Docments" style="width: 100%;">
+            <nz-table #basicTable [nzData]="docsSets" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Title</th>
+                  <th>Owner</th>
+                  <th>Doc Date</th>
+                  <th>Place Code</th>
+                  <th>Type</th>
+                  <th>Comment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of basicTable.data">
+                  <td>{{ data.docCode }}</td>
+                  <td>{{ data.docTitle}}</td>
+                  <td>{{ data.docOwner}}</td>
+                  <td>{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ data.docsPlaces?.codePlace}}</td>
+                  <td>{{ data.docsType?.type}}</td>
+                  <td>{{ data.comment}}</td>
+                  <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="viewImage(data)">
+                        <mat-icon>image</mat-icon>
+                        <span>View </span>
+                      </button>
+                      <button mat-menu-item (click)="editeDocs(data)">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit </span>
+                      </button>
+                      <button mat-menu-item (click)="deleteDoc(data)">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete </span>
+                      </button>
+                      <button mat-menu-item (click)="moveDoc(data)">
+                        <mat-icon>published_with_changes</mat-icon>
+                        <span>Move</span>
+                      </button>
+
+                      <button mat-menu-item (click)="onBarcode(data)">
+                        <mat-icon>qr_code_scanner</mat-icon>
+                        <span>QrCode</span>
+                      </button>
+
+                    </mat-menu>
+                  </td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-card>
+        </nz-collapse-panel>
+      </nz-collapse>
     </div>
   </div>
+
+  <ng-template #extraTpl>
+    <!-- add Sup Folder -->
+    <button mat-mini-fab color="accent" matTooltip="Create Sub Directory">
+      <mat-icon (click)="addSupFolderFolder()">create_new_folder</mat-icon>
+    </button>
+  </ng-template>
+
 </div>
